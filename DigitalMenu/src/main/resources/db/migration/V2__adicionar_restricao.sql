@@ -1,0 +1,1 @@
+insert into restricao values (1,true,'Alcoólico');
