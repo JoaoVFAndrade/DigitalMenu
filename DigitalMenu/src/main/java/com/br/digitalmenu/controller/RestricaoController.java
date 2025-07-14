@@ -1,6 +1,7 @@
 package com.br.digitalmenu.controller;
 
 import com.br.digitalmenu.dto.InsertRestricaoDTO;
+import com.br.digitalmenu.dto.RestricaoDTO;
 import com.br.digitalmenu.model.Restricao;
 import com.br.digitalmenu.repository.RestricaoRepository;
 import com.br.digitalmenu.service.RestricaoService;
@@ -33,5 +34,10 @@ public class RestricaoController {
     @DeleteMapping
     public ResponseEntity<?> deleteRestricao(@RequestParam Integer idRestricao){
         return restricaoService.deleteRestricao(idRestricao);
+    }
+
+    @PutMapping
+    public ResponseEntity<?> editarRestricao(@Valid @RequestBody RestricaoDTO restricaoDTO){
+        return restricaoService.editarRestricao(restricaoDTO);
     }
 }

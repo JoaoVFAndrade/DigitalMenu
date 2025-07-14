@@ -1,6 +1,7 @@
 package com.br.digitalmenu.service;
 
 import com.br.digitalmenu.dto.InsertRestricaoDTO;
+import com.br.digitalmenu.dto.RestricaoDTO;
 import com.br.digitalmenu.model.Restricao;
 import com.br.digitalmenu.repository.RestricaoRepository;
 import jakarta.servlet.Servlet;
@@ -41,5 +42,20 @@ public class RestricaoService {
         restricaoRepository.save(restricao);
 
         return ResponseEntity.ok("Restricao deleteda com sucesso");
+    }
+
+    public ResponseEntity<?> editarRestricao(RestricaoDTO restricaoDTO){
+        if(restricaoDTO.idRestricao() == 1){
+            return ResponseEntity.badRequest().body("Esta restrição não pode ser alterada");
+        }
+
+        Restricao restricao = restricaoRepository.getReferenceById(restricaoDTO.idRestricao());
+
+        if(restricaoDTO.nomeRestricao() != null && !restricaoDTO.nomeRestricao().isEmpty())
+            restricao.setNomeRestricao(restricaoDTO.nomeRestricao());
+
+        restricaoRepository.save(restricao);
+
+        return ResponseEntity.ok("Restrição alterada com sucesso");
     }
 }
