@@ -5,14 +5,15 @@ import lombok.Data;
 
 @Data
 @Entity(name = "categoria")
-public class Category {
+public class Categoria {
 
     @Id
     @Column(name = "id_categoria")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idCategory;
+    private Long idCategoria;
 
-    private String nameCategory;
+    @Column(name = "nome_categoria")
+    private String nomeCategoria;
 
-    private Boolean active;
+    private Boolean ativo;
 }
