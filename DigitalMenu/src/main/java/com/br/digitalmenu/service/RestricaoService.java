@@ -17,7 +17,7 @@ public class RestricaoService {
     @Autowired
     private RestricaoRepository restricaoRepository;
 
-    public ResponseEntity<?> insertRestricao(InsertRestricaoDTO insertRestricaoDTO){
+    public ResponseEntity<?> insertRestricao(InsertRestricaoDTO insertRestricaoDTO) {
 
         Restricao restricao = new Restricao();
 
@@ -28,5 +28,18 @@ public class RestricaoService {
         URI location = ServletUriComponentsBuilder.fromCurrentRequestUri().build(restricao);
 
         return ResponseEntity.created(location).body(restricao);
+    }
+
+    public ResponseEntity<?> deleteRestricao(Integer idRestricao) {
+        if (idRestricao == 1)
+            return ResponseEntity.badRequest().body("Esta restrição não pode ser deletada");
+
+        Restricao restricao = restricaoRepository.getReferenceById(idRestricao);
+
+        restricao.setAtivo(false);
+
+        restricaoRepository.save(restricao);
+
+        return ResponseEntity.ok("Restricao deleteda com sucesso");
     }
 }
