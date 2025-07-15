@@ -1,8 +1,11 @@
 package com.br.digitalmenu.controller;
 
 
+import com.br.digitalmenu.dto.request.CategoriaRequestDTO;
+import com.br.digitalmenu.dto.response.CategoriaResponseDTO;
 import com.br.digitalmenu.model.Categoria;
 import com.br.digitalmenu.service.CategoriaService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,24 +19,38 @@ public class CategoriaController {
     @Autowired
     private CategoriaService categoriaService;
 
-    @GetMapping
-    public List<Categoria> getAllCategorias(){
+    @GetMapping("/all")
+    public List<CategoriaResponseDTO> getAllCategorias(){
         return categoriaService.findAll();
     }
 
-    @GetMapping
-    public List<Categoria> getAllAtivos(){
+    @GetMapping("/ativos")
+    public List<CategoriaResponseDTO> getAllAtivos(){
         return categoriaService.findAllAtivos();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Categoria> getCategoriaById(@PathVariable Long id){
-        return categoriaService.findById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<CategoriaResponseDTO> getById(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(categoriaService.findById(id));
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping
-    Categoria criaCategoria(@RequestBody Categoria category){
-        return categoriaService.save(category);
+    public ResponseEntity<CategoriaResponseDTO> create(@RequestBody @Valid CategoriaRequestDTO dto){
+        return ResponseEntity.ok(categoriaService.save(dto));
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<CategoriaResponseDTO> ativaCategoria(@PathVariable @Valid Long id){
+        try{
+            categoriaService.ativaCategoria(id);
+            return ResponseEntity.noContent().build();
+        }catch (RuntimeException e){
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/{id}")
@@ -42,6 +59,15 @@ public class CategoriaController {
             categoriaService.delete(id);
             return ResponseEntity.noContent().build();
         }catch (RuntimeException e){
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CategoriaResponseDTO> update(@PathVariable Long id, @RequestBody @Valid CategoriaRequestDTO dto) {
+        try {
+            return ResponseEntity.ok(categoriaService.atualizaCategoria(id, dto));
+        } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
     }
