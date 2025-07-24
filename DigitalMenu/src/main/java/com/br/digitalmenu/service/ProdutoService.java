@@ -1,0 +1,130 @@
+package com.br.digitalmenu.service;
+
+import com.br.digitalmenu.dto.request.ProdutoRequestDTO;
+import com.br.digitalmenu.dto.response.ProdutoResponseDTO;
+import com.br.digitalmenu.model.DiaSemana;
+import com.br.digitalmenu.model.Ingrediente;
+import com.br.digitalmenu.model.Produto;
+import com.br.digitalmenu.model.Restricao;
+import com.br.digitalmenu.repository.*;
+import com.br.digitalmenu.validacoes.mapper.ProdutoMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+@Service
+public class ProdutoService {
+
+    @Autowired
+    private ProdutoRepository produtoRepository;
+
+    @Autowired
+    private CategoriaRepository categoriaRepository;
+
+    @Autowired
+    private IngredienteRepository ingredienteRepository;
+
+    @Autowired
+    private DiaSemanaRepository diaSemanaRepository;
+
+    @Autowired
+    private RestricaoRepository restricaoRepository;
+
+    @Autowired
+    private ProdutoMapper produtoMapper;
+
+
+    public List<ProdutoResponseDTO> findAll(){
+        return produtoRepository.findAll().stream().map(this::toDTO).collect(Collectors.toList());
+    }
+
+    public ProdutoResponseDTO findById(Long id){
+        return produtoRepository.findById(id)
+                .map(this::toDTO)
+                .orElseThrow(() ->new RuntimeException("Produto nao encontrado"));
+    }
+
+    public ProdutoResponseDTO atualizarProduto(Long id,ProdutoRequestDTO dto){
+        Produto produto = produtoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Produto nao encontrato"));
+
+        if (dto.getPreco() != null) {
+            produto.setPreco(dto.getPreco());
+        }
+
+        produtoMapper.atualizaProduto(dto, produto);
+
+        if (dto.getIdCategoria() != null){
+            produto.setCategoria(categoriaRepository.findById(dto.getIdCategoria())
+                    .orElseThrow(() -> new RuntimeException("Categoria nao encontraa")));
+        }
+
+        if (dto.getIngredientesIds() != null){
+            produto.setIngrediente(ingredienteRepository.findAllById(dto.getIngredientesIds()));
+        }
+
+        if (dto.getRestricoesIds() != null){
+            produto.setRestricao(restricaoRepository.findAllById(dto.getRestricoesIds()));
+        }
+
+        if (dto.getDiasSemanaIds() != null){
+            produto.setDiasSemana(diaSemanaRepository.findAllById(dto.getDiasSemanaIds()));
+        }
+        Produto atualizado = produtoRepository.save(produto);
+        return toDTO(atualizado);
+    }
+
+    public void desativarProduto(Long id){
+        produtoRepository.findById(id).map(produto -> {
+            produto.setAtivo(false);
+            return produtoRepository.save(produto);
+        }).orElseThrow(()-> new RuntimeException("Produto nao encontrado"));
+    }
+
+
+    public ProdutoResponseDTO criarProduto(ProdutoRequestDTO dto) {
+        Produto produto = new Produto();
+        produto.setNomeProduto(dto.getNomeProduto());
+        produto.setPreco(dto.getPreco());
+        produto.setEstoque(dto.getEstoque());
+        produto.setHorarioInicial(dto.getHorarioInicial());
+        produto.setHorarioFinal(dto.getHorarioFinal());
+        produto.setFoto(dto.getFoto());
+        produto.setAtivo(dto.getAtivo());
+
+        produto.setCategoria(categoriaRepository.findById(dto.getIdCategoria())
+                .orElseThrow(() -> new RuntimeException("Categoria não encontrada")));
+
+        produto.setIngrediente(ingredienteRepository.findAllById(dto.getIngredientesIds()));
+        produto.setRestricao(restricaoRepository.findAllById(dto.getRestricoesIds()));
+        produto.setDiasSemana(diaSemanaRepository.findAllById(dto.getDiasSemanaIds()));
+
+        Produto salvo = produtoRepository.save(produto);
+        return toDTO(salvo);
+    }
+
+
+    private ProdutoResponseDTO toDTO(Produto produto) {
+        return ProdutoResponseDTO.builder()
+                .idProduto(produto.getIdProduto())
+                .nomeProduto(produto.getNomeProduto())
+                .preco(produto.getPreco())
+                .estoque(produto.getEstoque())
+                .horarioInicial(produto.getHorarioInicial())
+                .horarioFinal(produto.getHorarioFinal())
+                .foto(produto.getFoto())
+                .ativo(produto.getAtivo())
+                .nomeCategoria(produto.getCategoria().getNomeCategoria())
+                .ingredientes(produto.getIngrediente().stream()
+                        .map(Ingrediente::getNomeIngrediente)
+                        .collect(Collectors.toList()))
+                .restricoes(produto.getRestricao().stream()
+                        .map(Restricao::getNomeRestricao)
+                        .collect(Collectors.toList()))
+                .diasSemana(produto.getDiasSemana().stream()
+                        .map(DiaSemana::getNomeDia)
+                        .collect(Collectors.toList()))
+                .build();
+    }
+}
