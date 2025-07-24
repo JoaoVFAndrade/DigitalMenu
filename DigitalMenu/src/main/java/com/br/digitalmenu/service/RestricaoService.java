@@ -31,7 +31,7 @@ public class RestricaoService {
         return ResponseEntity.created(location).body(restricao);
     }
 
-    public ResponseEntity<?> deleteRestricao(Integer idRestricao) {
+    public ResponseEntity<?> deleteRestricao(Long idRestricao) {
         if (idRestricao == 1)
             return ResponseEntity.badRequest().body("Esta restrição não pode ser deletada");
 
