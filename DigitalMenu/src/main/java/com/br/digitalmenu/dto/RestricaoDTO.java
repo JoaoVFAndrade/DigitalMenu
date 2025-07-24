@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 public record RestricaoDTO(
         @NotNull
         @EntityExists(entityClass = Restricao.class)
-        Integer idRestricao,
+        Long idRestricao,
         String nomeRestricao
 ) {
 }

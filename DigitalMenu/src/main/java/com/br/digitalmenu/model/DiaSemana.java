@@ -11,7 +11,7 @@ public class DiaSemana {
 
     @Id
     @Column(name = "id_dia")
-    private Integer idDia;
+    private Long idDia;
 
     @Column(name = "nome_dia", length = 13)
     private String nomeDia;

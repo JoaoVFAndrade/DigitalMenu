@@ -32,7 +32,7 @@ public class RestricaoController {
     }
 
     @DeleteMapping
-    public ResponseEntity<?> deleteRestricao(@RequestParam Integer idRestricao){
+    public ResponseEntity<?> deleteRestricao(@RequestParam Long idRestricao){
         return restricaoService.deleteRestricao(idRestricao);
     }
 
