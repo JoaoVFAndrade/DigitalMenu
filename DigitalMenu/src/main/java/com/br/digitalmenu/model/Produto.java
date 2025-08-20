@@ -2,6 +2,8 @@ package com.br.digitalmenu.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalTime;
@@ -15,13 +17,16 @@ public class Produto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idProduto;
 
-    @Column(name = "nome_produto")
+    @Column(name = "nome_produto", length = 50)
+    @NotBlank
     private String nomeProduto;
 
     @Column(name = "preco")
+    @NotNull
     private Double preco;
 
     @Column(name = "estoque")
+    @NotNull
     private Integer estoque;
 
     @Column(name = "horario_inicial")
