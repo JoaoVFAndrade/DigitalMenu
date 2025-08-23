@@ -17,7 +17,7 @@ public class Produto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idProduto;
 
-    @Column(name = "nome_produto", length = 50)
+    @Column(name = "nome_produto", length = 50, nullable = false)
     @NotBlank
     private String nomeProduto;
 
