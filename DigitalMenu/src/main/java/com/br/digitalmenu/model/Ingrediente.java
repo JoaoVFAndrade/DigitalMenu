@@ -13,7 +13,7 @@ public class Ingrediente {
     @Column(name = "id_ingrediente")
     private Long idIngrediente;
 
-    @Column(name = "nome_ingrediente", length = 50)
+    @Column(name = "nome_ingrediente", length = 50, nullable = false)
     @NotBlank
     private String nomeIngrediente;
 
