@@ -2,6 +2,7 @@ package com.br.digitalmenu.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,10 +20,16 @@ public class SecurityConfig {
                                 "/swagger-ui/**",
                                 "/swagger-ui.html")
                         .permitAll()
-                        .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/adm/**").hasRole("FUNCIONARIO_ADM")
-                        .requestMatchers("/garcom/**").hasRole("FUNCIONARIO_GARCOM")
-                        .requestMatchers("/cliente/**").hasRole("CLIENTE")
+
+                        .requestMatchers("/auth/**", "/clientes/cadastrar").permitAll()
+
+                        .requestMatchers("/adm/**").hasAuthority("FUNCIONARIO_ADM")
+
+                        .requestMatchers("/garcom/**").hasAuthority("FUNCIONARIO_GARCOM")
+
+                        .requestMatchers(HttpMethod.GET, "/clientes/**", "/ingredientes/**",
+                                "/restricoes/**", "/produtos/**", "/funcionarios/**",
+                                "/diaSemana/**", "/categorias/**").hasAuthority("CLIENTE")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class)

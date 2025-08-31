@@ -5,6 +5,7 @@ import com.br.digitalmenu.dto.response.ClienteResponseDTO;
 import com.br.digitalmenu.model.Cliente;
 import com.br.digitalmenu.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,11 +17,14 @@ public class ClienteService {
     @Autowired
     private ClienteRepository clienteRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public ClienteResponseDTO salvar(ClienteRequestDTO dto) {
         Cliente cliente = new Cliente();
         cliente.setNome(dto.getNome());
         cliente.setEmail(dto.getEmail());
-        cliente.setSenha(dto.getSenha());
+        cliente.setSenha(passwordEncoder.encode(dto.getSenha()));
         cliente.setDataNascimento(dto.getDataNascimento());
 
         Cliente salvo = clienteRepository.save(cliente);
