@@ -11,12 +11,12 @@ import java.util.List;
 public class ProdutoRequestDTO {
     private String nomeProduto;
     private Double preco;
-    private Integer estoque;
     @JsonFormat(pattern = "HH:mm")
     private LocalTime horarioInicial;
     @JsonFormat(pattern = "HH:mm")
     private LocalTime horarioFinal;
     private String foto;
+    private Boolean estoque;
     private Boolean ativo;
     private Long idCategoria;
     private List<Long> ingredientesIds;

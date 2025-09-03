@@ -83,14 +83,14 @@ public class ProdutoService {
     }
 
 
-    public ProdutoResponseDTO criarProduto(ProdutoRequestDTO dto) {
+    public ProdutoResponseDTO salvar(ProdutoRequestDTO dto) {
         Produto produto = new Produto();
         produto.setNomeProduto(dto.getNomeProduto());
         produto.setPreco(dto.getPreco());
-        produto.setEstoque(dto.getEstoque());
         produto.setHorarioInicial(dto.getHorarioInicial());
         produto.setHorarioFinal(dto.getHorarioFinal());
         produto.setFoto(dto.getFoto());
+        produto.setEstoque(dto.getEstoque());
         produto.setAtivo(dto.getAtivo());
 
         produto.setCategoria(categoriaRepository.findById(dto.getIdCategoria())
@@ -110,10 +110,10 @@ public class ProdutoService {
                 .idProduto(produto.getIdProduto())
                 .nomeProduto(produto.getNomeProduto())
                 .preco(produto.getPreco())
-                .estoque(produto.getEstoque())
                 .horarioInicial(produto.getHorarioInicial())
                 .horarioFinal(produto.getHorarioFinal())
                 .foto(produto.getFoto())
+                .estoque(produto.getEstoque())
                 .ativo(produto.getAtivo())
                 .nomeCategoria(produto.getCategoria().getNomeCategoria())
                 .ingredientes(produto.getIngrediente().stream()

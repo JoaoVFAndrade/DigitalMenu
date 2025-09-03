@@ -18,10 +18,10 @@ public class ProdutoResponseDTO {
     private Long idProduto;
     private String nomeProduto;
     private Double preco;
-    private Integer estoque;
     private LocalTime horarioInicial;
     private LocalTime horarioFinal;
     private String foto;
+    private Boolean estoque;
     private Boolean ativo;
     private String nomeCategoria;
     private List<String> ingredientes;

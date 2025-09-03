@@ -5,6 +5,7 @@ import com.br.digitalmenu.dto.response.ClienteResponseDTO;
 import com.br.digitalmenu.service.ClienteService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,8 @@ public class ClienteController {
 
     @PostMapping
     public ResponseEntity<ClienteResponseDTO> criar(@Valid @RequestBody ClienteRequestDTO dto) {
-        return ResponseEntity.ok(clienteService.salvar(dto));
+        ClienteResponseDTO responseDTO = clienteService.salvar(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
     @GetMapping
