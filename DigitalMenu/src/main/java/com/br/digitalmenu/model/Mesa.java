@@ -1,0 +1,19 @@
+package com.br.digitalmenu.model;
+
+import jakarta.persistence.*;
+import lombok.Data;
+
+@Entity
+@Data
+public class Mesa {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long idMesa;
+
+    @Column(unique = true, length = 25, nullable = false)
+    private String numeroMesa;
+
+    @Column(nullable = false)
+    private Boolean ativo;
+}
