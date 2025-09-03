@@ -4,6 +4,7 @@ import com.br.digitalmenu.dto.request.ProdutoRequestDTO;
 import com.br.digitalmenu.dto.response.ProdutoResponseDTO;
 import com.br.digitalmenu.service.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +28,8 @@ public class ProdutoController {
     }
 
     @PostMapping ResponseEntity<ProdutoResponseDTO> criar(@RequestBody ProdutoRequestDTO dto){
-        return ResponseEntity.ok(produtoService.criarProduto(dto));
+        ProdutoResponseDTO responseDTO = produtoService.salvar(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
     @PutMapping("/{id}")

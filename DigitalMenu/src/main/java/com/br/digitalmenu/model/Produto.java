@@ -25,10 +25,6 @@ public class Produto {
     @NotNull
     private Double preco;
 
-    @Column(name = "estoque")
-    @NotNull
-    private Integer estoque;
-
     @Column(name = "horario_inicial")
     @JsonFormat(pattern = "HH:mm")
     private LocalTime horarioInicial;
@@ -37,8 +33,12 @@ public class Produto {
     @JsonFormat(pattern = "HH:mm")
     private LocalTime horarioFinal;
 
-    @Column(name = "url_foto")
+    @Column(name = "url_imagem")
     private String foto;
+
+    @Column(name = "em_estoque")
+    @NotNull
+    private Boolean estoque;
 
     @Column(name = "ativo")
     private Boolean ativo;

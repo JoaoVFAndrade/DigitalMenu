@@ -7,7 +7,7 @@ import lombok.Data;
 public class IngredienteRequestDTO {
     private String nomeIngrediente;
 
-    private Integer estoque;
+    private Boolean estoque;
 
     private boolean ativo;
 }

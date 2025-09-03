@@ -24,6 +24,8 @@ public class RestricaoService {
 
         restricao.setNomeRestricao(insertRestricaoDTO.nomeRestricao());
 
+        restricao.setTipoRestricao(insertRestricaoDTO.tipoRestricao());
+
         restricaoRepository.save(restricao);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequestUri().build(restricao);
@@ -53,6 +55,9 @@ public class RestricaoService {
 
         if(restricaoDTO.nomeRestricao() != null && !restricaoDTO.nomeRestricao().isEmpty())
             restricao.setNomeRestricao(restricaoDTO.nomeRestricao());
+
+        if(restricaoDTO.tipoRestricao() != null)
+            restricao.setTipoRestricao(restricaoDTO.tipoRestricao());
 
         restricaoRepository.save(restricao);
 
