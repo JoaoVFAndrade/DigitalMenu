@@ -33,4 +33,8 @@ public class Cliente {
     @Column(nullable = false)
     @Past(message = "A data de nascimento deve ser no passado")
     private LocalDate dataNascimento;
+
+    @Column(nullable = false)
+    private boolean emailValidado = false;
+
 }

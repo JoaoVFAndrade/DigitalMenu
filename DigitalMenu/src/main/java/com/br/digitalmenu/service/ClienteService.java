@@ -20,15 +20,22 @@ public class ClienteService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private VerificacaoService verificacaoService;
+
+    @Autowired
+    private EmailService emailService;
+
     public ClienteResponseDTO salvar(ClienteRequestDTO dto) {
         Cliente cliente = new Cliente();
         cliente.setNome(dto.getNome());
         cliente.setEmail(dto.getEmail());
         cliente.setSenha(passwordEncoder.encode(dto.getSenha()));
         cliente.setDataNascimento(dto.getDataNascimento());
+        cliente.setEmailValidado(false);
 
         Cliente salvo = clienteRepository.save(cliente);
-
+        emailService.enviarCodigoVerificacao(cliente.getEmail());
         return toResponseDTO(salvo);
     }
 
