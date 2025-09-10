@@ -29,7 +29,6 @@ public class MesaController {
         return mesaService.insertMesa(insertMesaDTO);
     }
 
-
     @GetMapping("/qrCode")
     public ResponseEntity<?> gerarQrCode(@RequestParam Long idMesa){
         return mesaService.gerarQrCode(idMesa);

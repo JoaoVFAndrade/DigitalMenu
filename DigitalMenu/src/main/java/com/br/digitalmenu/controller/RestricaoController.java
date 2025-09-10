@@ -26,6 +26,14 @@ public class RestricaoController {
         return ResponseEntity.ok(restricaoRepository.findAll(Sort.by("nomeRestricao").ascending()));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getRestricaoById(@PathVariable Long id) {
+        return restricaoRepository.findById(id)
+                .map(restricao -> ResponseEntity.ok(restricao))
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+
     @PostMapping
     public ResponseEntity<?> insertRestricao(@Valid @RequestBody InsertRestricaoDTO insertRestricaoDTO){
         return restricaoService.insertRestricao(insertRestricaoDTO);
@@ -40,4 +48,5 @@ public class RestricaoController {
     public ResponseEntity<?> editarRestricao(@Valid @RequestBody RestricaoDTO restricaoDTO){
         return restricaoService.editarRestricao(restricaoDTO);
     }
+
 }
