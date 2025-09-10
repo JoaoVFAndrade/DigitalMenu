@@ -13,7 +13,7 @@ public class VerificacaoService {
 
     public String gerarCodigo(String email) {
         String codigo = String.format("%04d", ThreadLocalRandom.current().nextInt(10000));
-        CodigoInfo info = new CodigoInfo(codigo, LocalDateTime.now().plusMinutes(10));
+        CodigoInfo info = new CodigoInfo(codigo, LocalDateTime.now().plusMinutes(5));
         codigos.put(email, info);
         return codigo;
     }
@@ -36,3 +36,4 @@ public class VerificacaoService {
 
     private record CodigoInfo(String codigo, LocalDateTime expira) {}
 }
+//@TODO fazer o renvio caso o cliente nao consiga confirmar nos seus 5 min

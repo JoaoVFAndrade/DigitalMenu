@@ -22,7 +22,7 @@ public class SecurityConfig {
                         .permitAll()
 
                         .requestMatchers("/auth/**", "/clientes/cadastrar"
-                                ,"/verificacao/confirmar").permitAll()
+                                ,"/clientes/confirmar").permitAll()
 
                         .requestMatchers("/adm/**").hasAuthority("FUNCIONARIO_ADM")
 
