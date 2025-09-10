@@ -47,9 +47,6 @@ public class RestricaoService {
     }
 
     public ResponseEntity<?> editarRestricao(RestricaoDTO restricaoDTO){
-        if(restricaoDTO.idRestricao() == 1){
-            return ResponseEntity.badRequest().body("Esta restrição não pode ser alterada");
-        }
 
         Restricao restricao = restricaoRepository.getReferenceById(restricaoDTO.idRestricao());
 
@@ -61,6 +58,6 @@ public class RestricaoService {
 
         restricaoRepository.save(restricao);
 
-        return ResponseEntity.ok("Restrição alterada com sucesso");
+        return ResponseEntity.ok(restricao);
     }
 }
