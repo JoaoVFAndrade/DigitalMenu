@@ -34,4 +34,14 @@ public class Pedido {
     @Column(precision = 10, scale = 2, nullable = false)
     private BigDecimal total;
 
+    @ManyToOne
+    @JoinColumn(name = "id_mesa", nullable = false)
+    private Mesa mesa;
+
+    @ManyToOne
+    @JoinColumn(name = "id_cliente", nullable = false)
+    private Cliente cliente;
+
+    @OneToMany
+    private List<ProdutoPedido> produtoPedidos;
 }

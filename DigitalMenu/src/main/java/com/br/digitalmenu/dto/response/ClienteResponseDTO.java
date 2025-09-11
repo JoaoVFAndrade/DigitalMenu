@@ -1,5 +1,6 @@
 package com.br.digitalmenu.dto.response;
 
+import com.br.digitalmenu.model.Cliente;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -15,5 +16,12 @@ public class ClienteResponseDTO {
 
     public ClienteResponseDTO() {
 
+    }
+
+    public ClienteResponseDTO(Cliente cliente) {
+        this.id = cliente.getIdCliente();
+        this.nome = cliente.getNome();
+        this.email = cliente.getEmail();
+        this.dataNascimento = cliente.getDataNascimento();
     }
 }

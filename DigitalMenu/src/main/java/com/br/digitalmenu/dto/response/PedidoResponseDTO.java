@@ -1,5 +1,7 @@
 package com.br.digitalmenu.dto.response;
 
+import com.br.digitalmenu.model.Cliente;
+import com.br.digitalmenu.model.Mesa;
 import com.br.digitalmenu.model.StatusPedido;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,4 +22,8 @@ public class PedidoResponseDTO {
     private StatusPedido statusPedido;
 
     private BigDecimal total;
+
+    private ClienteResponseDTO cliente;
+
+    private MesaResponseDTO mesa;
 }

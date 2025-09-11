@@ -11,4 +11,7 @@ public record MesaResponseDTO(
         String numeroMesa,
         Boolean ativo
 ) {
+        public MesaResponseDTO(Mesa mesa) {
+                this(mesa.getIdMesa(), mesa.getNumeroMesa(), mesa.getAtivo());
+        }
 }

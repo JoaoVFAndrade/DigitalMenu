@@ -16,4 +16,8 @@ public class PedidoRequestDTO {
     private StatusPedido statusPedido;
 
     private BigDecimal total;
+
+    private Long idMesa;
+
+    private Long idCliente;
 }

@@ -1,0 +1,41 @@
+package com.br.digitalmenu.service;
+
+import com.br.digitalmenu.dto.InsertProdutoPedidoDTO;
+import com.br.digitalmenu.model.ProdutoPedido;
+import com.br.digitalmenu.repository.PedidoRepository;
+import com.br.digitalmenu.repository.ProdutoPedidoRepository;
+import com.br.digitalmenu.repository.ProdutoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
+
+@Service
+public class ProdutoPedidoService {
+
+    @Autowired
+    private ProdutoPedidoRepository produtoPedidoRepository;
+
+    @Autowired
+    private ProdutoRepository produtoRepository;
+
+    @Autowired
+    private PedidoRepository pedidoRepository;
+
+    public ResponseEntity<?> insertProdutoPedido(InsertProdutoPedidoDTO dto){
+        ProdutoPedido produtoPedido = new ProdutoPedido();
+
+        produtoPedido.setProduto(produtoRepository.getReferenceById(dto.idProduto()));
+        produtoPedido.setPedido(pedidoRepository.getReferenceById(dto.idPedido()));
+        produtoPedido.setQuantidade(dto.quantidade());
+        produtoPedido.setSubTotal(Math.round(produtoPedido.getQuantidade() * produtoPedido.getProduto().getPreco() * 100.0) / 100.0);
+
+        produtoPedidoRepository.save(produtoPedido);
+
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().build(produtoPedido);
+
+        return ResponseEntity.created(location).body(produtoPedido);
+    }
+}
