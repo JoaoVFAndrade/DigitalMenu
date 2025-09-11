@@ -1,0 +1,29 @@
+version: "3.9"
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: digitalmenu-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: digitalmenu
+    ports:
+      - "3307:3306"
+    healthcheck:
+        test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot" ]
+        interval: 5s
+        timeout: 5s
+        retries: 10
+
+  app:
+    build: .
+    container_name: digitalmenu-app
+    ports:
+      - "8080:8080"
+    environment:
+      DB_HOST: db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    depends_on:
+      db:
+       condition: service_healthy
