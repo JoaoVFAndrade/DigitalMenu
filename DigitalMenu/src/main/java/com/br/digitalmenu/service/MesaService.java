@@ -71,6 +71,10 @@ public class MesaService {
             mesa.setAtivo(mesaResponseDTO.ativo());
         }
 
+        if(mesaResponseDTO.qtdeAssentos() != null){
+            mesa.setQtdeAssentos(mesaResponseDTO.qtdeAssentos());
+        }
+
         mesaRepository.save(mesa);
 
         return ResponseEntity.noContent().build();
