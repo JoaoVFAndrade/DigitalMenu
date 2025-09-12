@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -35,5 +36,5 @@ public class Ingrediente {
             inverseJoinColumns = @JoinColumn(name = "id_restricao")
     )
     @JsonManagedReference
-    private Set<Restricao> restricoes = new HashSet<>();
+    private List<Restricao> restricoes;
 }

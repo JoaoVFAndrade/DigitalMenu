@@ -3,31 +3,36 @@ package com.br.digitalmenu.service;
 import com.br.digitalmenu.dto.request.IngredienteRequestDTO;
 import com.br.digitalmenu.dto.response.IngredienteResponseDTO;
 import com.br.digitalmenu.model.Ingrediente;
+import com.br.digitalmenu.model.Restricao;
 import com.br.digitalmenu.repository.IngredienteRepository;
+import com.br.digitalmenu.repository.RestricaoRepository;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class IngredienteService {
     private final IngredienteRepository ingredienteRepository;
+    private final RestricaoRepository restricaoRepository;
 
-    public IngredienteService(IngredienteRepository ingredienteRepository){
+    public IngredienteService(IngredienteRepository ingredienteRepository,RestricaoRepository restricaoRepository){
         this.ingredienteRepository = ingredienteRepository;
+        this.restricaoRepository = restricaoRepository;
     }
 
     public List<IngredienteResponseDTO> findAll(){
         return ingredienteRepository.findAll()
                 .stream()
-                .map(ingrediente -> new IngredienteResponseDTO(ingrediente.getIdIngrediente(), ingrediente.getNomeIngrediente(),ingrediente.getEstoque(),ingrediente.getAtivo()))
+                .map(IngredienteResponseDTO::new)
                 .toList();
     }
 
     public List<IngredienteResponseDTO> findAllAtivos(){
         return ingredienteRepository.findByAtivoTrue()
                 .stream()
-                .map(ingrediente -> new IngredienteResponseDTO(ingrediente.getIdIngrediente(), ingrediente.getNomeIngrediente(), ingrediente.getEstoque(), ingrediente.getAtivo()))
+                .map(IngredienteResponseDTO::new)
                 .toList();
     }
 
@@ -35,17 +40,18 @@ public class IngredienteService {
         Ingrediente ingrediente = ingredienteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Ingrediente nao encontrado com id:" + id ));
 
-        return new IngredienteResponseDTO(ingrediente.getIdIngrediente(), ingrediente.getNomeIngrediente(), ingrediente.getEstoque(), ingrediente.getAtivo());
+        return new IngredienteResponseDTO(ingrediente);
     }
 
     public IngredienteResponseDTO save (@Valid IngredienteRequestDTO dto){
         Ingrediente ingrediente = new Ingrediente();
         ingrediente.setNomeIngrediente(dto.getNomeIngrediente());
+        ingrediente.setRestricoes(restricaoRepository.findAllById(dto.getIdRestricoes()));
         ingrediente.setEstoque(dto.getEstoque());
         ingrediente.setAtivo(dto.isAtivo());
 
         Ingrediente salvar = ingredienteRepository.save(ingrediente);
-        return new IngredienteResponseDTO(salvar.getIdIngrediente(), salvar.getNomeIngrediente(), salvar.getEstoque(), salvar.getAtivo());
+        return new IngredienteResponseDTO(ingrediente);
     }
 
     public void delete(Long id){
@@ -71,14 +77,13 @@ public class IngredienteService {
             ingrediente.setEstoque(dto.getEstoque());
         }
 
+        if(dto.getIdRestricoes() != null){
+            ingrediente.setRestricoes(restricaoRepository.findAllById(dto.getIdRestricoes()));
+        }
+
         Ingrediente atualizado = ingredienteRepository.save(ingrediente);
 
-        return new IngredienteResponseDTO(
-                atualizado.getIdIngrediente(),
-                atualizado.getNomeIngrediente(),
-                atualizado.getEstoque(),
-                atualizado.getAtivo()
-        );
+        return new IngredienteResponseDTO(ingrediente);
     }
 }
 
