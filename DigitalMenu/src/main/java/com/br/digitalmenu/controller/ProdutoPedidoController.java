@@ -43,6 +43,11 @@ public class ProdutoPedidoController {
                 .filter(produtoPedido -> statusProdutoPedido == null || produtoPedido.getStatus().equals(statusProdutoPedido))
                 .filter(produtoPedido -> statusPedido == null || produtoPedido.getPedido().getStatusPedido().equals(statusPedido)).map(ProdutoPedidoResponseDTO::new).toList();
 
-        return produtoPedidos.isEmpty() ? ResponseEntity.notFound().build():ResponseEntity.ok(produtoPedidos);
+        return ResponseEntity.ok(produtoPedidos);
+    }
+
+    @GetMapping("/byId")
+    public ResponseEntity<?> getProdutoPedidoById(@RequestParam Long idProdutoPedido){
+        return produtoPedidoRepository.existsById(idProdutoPedido)? ResponseEntity.ok(new ProdutoPedidoResponseDTO(produtoPedidoRepository.getReferenceById(idProdutoPedido))):ResponseEntity.notFound().build();
     }
 }
