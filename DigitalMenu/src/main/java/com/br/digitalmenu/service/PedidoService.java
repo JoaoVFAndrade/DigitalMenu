@@ -28,6 +28,9 @@ public class PedidoService {
     @Autowired
     private ClienteRepository clienteRepository;
 
+    @Autowired
+    private ProdutoPedidoService produtoPedidoService;
+
     public List<PedidoResponseDTO> findAll(){
         return pedidoRepository.findAll()
                 .stream()
@@ -70,9 +73,14 @@ public class PedidoService {
                 salvar.getStatusPedido(), salvar.getTotal(),new ClienteResponseDTO(salvar.getCliente()),new MesaResponseDTO(salvar.getMesa()));
     }
 
-    public void delete(Long id){
-        pedidoRepository.findById(id).map(pedido -> {pedido.setStatusPedido(StatusPedido.CANCELADO);
-        return pedidoRepository.save(pedido);
+    public void delete(Long id) {
+        pedidoRepository.findById(id).map(pedido -> {
+            pedido.setStatusPedido(StatusPedido.CANCELADO);
+            pedido.getProdutoPedidos().forEach(produtoPedido -> {
+                produtoPedidoService.cancelarProdutoPedido(produtoPedido.getId());
+            });
+            pedido.setFinalizadoEm(LocalDateTime.now());
+            return pedidoRepository.save(pedido);
         }).orElseThrow(() -> new RuntimeException("pedido nao encontrado"));
     }
 
