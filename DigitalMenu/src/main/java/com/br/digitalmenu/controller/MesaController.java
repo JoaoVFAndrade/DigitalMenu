@@ -24,6 +24,11 @@ public class MesaController {
         return ResponseEntity.ok(mesaRepository.findAll());
     }
 
+    @GetMapping("/getById")
+    public ResponseEntity<?> findMesaById (@RequestParam Long idMesa){
+        return mesaRepository.existsById(idMesa) ? ResponseEntity.ok(mesaRepository.getReferenceById(idMesa)) : ResponseEntity.notFound().build();
+    }
+
     @PostMapping
     public ResponseEntity<?> insertMesa(@RequestBody @Valid InsertMesaDTO insertMesaDTO){
         return mesaService.insertMesa(insertMesaDTO);
