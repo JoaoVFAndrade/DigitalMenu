@@ -50,4 +50,9 @@ public class ProdutoPedidoController {
     public ResponseEntity<?> getProdutoPedidoById(@RequestParam Long idProdutoPedido){
         return produtoPedidoRepository.existsById(idProdutoPedido)? ResponseEntity.ok(new ProdutoPedidoResponseDTO(produtoPedidoRepository.getReferenceById(idProdutoPedido))):ResponseEntity.notFound().build();
     }
+
+    @DeleteMapping
+    public ResponseEntity<?> cancelarProdutoPedido(@RequestParam Long idProdutoPedido){
+        return produtoPedidoService.cancelarProdutoPedido(idProdutoPedido);
+    }
 }
