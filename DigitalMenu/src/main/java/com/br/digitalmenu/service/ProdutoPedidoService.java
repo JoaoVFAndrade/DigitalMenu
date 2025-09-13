@@ -60,4 +60,21 @@ public class ProdutoPedidoService {
 
         return ResponseEntity.ok(new ProdutoPedidoResponseDTO(produtoPedido));
     }
+
+    public ResponseEntity<?> finalizarProdutoPedido(Long idProdutoPedido){
+        if(!produtoPedidoRepository.existsById(idProdutoPedido))
+            return ResponseEntity.notFound().build();
+
+        ProdutoPedido produtoPedido = produtoPedidoRepository.getReferenceById(idProdutoPedido);
+
+        if(!produtoPedido.getStatus().equals(StatusProdutoPedido.EM_PREPARACAO))
+            return ResponseEntity.status(409).body("Produto já finalizado ou cancelado");
+
+        produtoPedido.setStatus(StatusProdutoPedido.FINALIZADO);
+        produtoPedido.getPedido().setTotal(produtoPedido.getPedido().getTotal().add(BigDecimal.valueOf(produtoPedido.getSubTotal())));
+
+        produtoPedidoRepository.save(produtoPedido);
+
+        return ResponseEntity.ok(new ProdutoPedidoResponseDTO(produtoPedido));
+    }
 }

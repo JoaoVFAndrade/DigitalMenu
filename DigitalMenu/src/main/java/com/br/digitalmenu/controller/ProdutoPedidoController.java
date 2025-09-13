@@ -55,4 +55,9 @@ public class ProdutoPedidoController {
     public ResponseEntity<?> cancelarProdutoPedido(@RequestParam Long idProdutoPedido){
         return produtoPedidoService.cancelarProdutoPedido(idProdutoPedido);
     }
+
+    @PatchMapping("/finalizarProdutoPedido")
+    public ResponseEntity<?> finalizarProdutoPedido(@RequestParam Long idProdutoPedido){
+        return produtoPedidoService.finalizarProdutoPedido(idProdutoPedido);
+    }
 }
