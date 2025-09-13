@@ -2,6 +2,7 @@ package com.br.digitalmenu.dto.response;
 
 import com.br.digitalmenu.model.Mesa;
 import com.br.digitalmenu.validacoes.EntityExists;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
 public record MesaResponseDTO(
@@ -9,7 +10,9 @@ public record MesaResponseDTO(
         @EntityExists(entityClass = Mesa.class)
         Long id,
         String numeroMesa,
-        Boolean ativo
+        Boolean ativo,
+        @Min(1)
+        Integer qtdeAssentos
 ) {
         public MesaResponseDTO(Mesa mesa) {
                 this(mesa.getIdMesa(), mesa.getNumeroMesa(), mesa.getAtivo());

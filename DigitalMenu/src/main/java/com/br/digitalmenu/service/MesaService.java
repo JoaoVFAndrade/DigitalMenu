@@ -30,6 +30,7 @@ public class MesaService {
         Mesa mesa = new Mesa();
 
         mesa.setNumeroMesa(insertMesaDTO.numeroMesa());
+        mesa.setQtdeAssentos(insertMesaDTO.qtdeAssentos());
         mesa.setAtivo(true);
 
         mesaRepository.save(mesa);
@@ -68,6 +69,10 @@ public class MesaService {
 
         if(mesaResponseDTO.ativo() != null){
             mesa.setAtivo(mesaResponseDTO.ativo());
+        }
+
+        if(mesaResponseDTO.qtdeAssentos() != null){
+            mesa.setQtdeAssentos(mesaResponseDTO.qtdeAssentos());
         }
 
         mesaRepository.save(mesa);
