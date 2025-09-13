@@ -14,4 +14,7 @@ public record MesaResponseDTO(
         @Min(1)
         Integer qtdeAssentos
 ) {
+        public MesaResponseDTO(Mesa mesa) {
+                this(mesa.getIdMesa(), mesa.getNumeroMesa(), mesa.getAtivo(), mesa.getQtdeAssentos());
+        }
 }
