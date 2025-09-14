@@ -24,9 +24,11 @@ public class MesaController {
         return ResponseEntity.ok(mesaRepository.findAll());
     }
 
-    @GetMapping("/getById")
-    public ResponseEntity<?> findMesaById (@RequestParam Long idMesa){
-        return mesaRepository.existsById(idMesa) ? ResponseEntity.ok(mesaRepository.getReferenceById(idMesa)) : ResponseEntity.notFound().build();
+    @GetMapping("/{id}")
+    public ResponseEntity<?> findMesaById(@PathVariable Long id) {
+        return mesaRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping

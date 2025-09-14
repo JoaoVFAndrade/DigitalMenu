@@ -15,6 +15,7 @@ public class IngredienteResponseDTO {
     private Boolean estoque;
     private boolean ativo;
     private List<String> restricoes;
+    private List<Long> restricoesIds;
 
     public IngredienteResponseDTO(Ingrediente ingrediente) {
         this.idIngrediente = ingrediente.getIdIngrediente();
@@ -22,5 +23,6 @@ public class IngredienteResponseDTO {
         this.estoque = ingrediente.getEstoque();
         this.ativo = ingrediente.getAtivo();
         this.restricoes = ingrediente.getRestricoes().stream().map(Restricao::getNomeRestricao).toList();
+        this.restricoesIds = ingrediente.getRestricoes().stream().map(Restricao::getIdRestricao).toList();
     }
 }
