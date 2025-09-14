@@ -2,6 +2,7 @@ package com.br.digitalmenu.controller;
 
 import com.br.digitalmenu.dto.request.PedidoRequestDTO;
 import com.br.digitalmenu.dto.response.PedidoResponseDTO;
+import com.br.digitalmenu.service.PagamentoService;
 import com.br.digitalmenu.service.PedidoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,9 @@ public class PedidoController {
 
     @Autowired
     private PedidoService pedidoService;
+
+    @Autowired
+    private PagamentoService pagamentoService;
 
     @GetMapping("/all")
     public List<PedidoResponseDTO> getAllPedidos(){return pedidoService.findAll();}
@@ -59,5 +63,10 @@ public class PedidoController {
         }catch (RuntimeException e){
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/gerarPagamento")
+    public ResponseEntity<?> realizarPagamento(@RequestParam Long id){
+        return pagamentoService.gerarPagamento(id);
     }
 }
