@@ -26,7 +26,7 @@ public class RestricaoController {
         return ResponseEntity.ok(restricaoRepository.findAll(Sort.by("nomeRestricao").ascending()));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{idMesa}")
     public ResponseEntity<?> getRestricaoById(@PathVariable Long id) {
         return restricaoRepository.findById(id)
                 .map(restricao -> ResponseEntity.ok(restricao))

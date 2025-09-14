@@ -31,7 +31,7 @@ public class CategoriaController {
         return categoriaService.findAllAtivos();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{idMesa}")
     public ResponseEntity<CategoriaResponseDTO> getById(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(categoriaService.findById(id));
@@ -46,7 +46,7 @@ public class CategoriaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/{idMesa}")
     public ResponseEntity<CategoriaResponseDTO> ativaCategoria(@PathVariable @Valid Long id){
         try{
             categoriaService.ativaCategoria(id);
@@ -56,7 +56,7 @@ public class CategoriaController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{idMesa}")
     public ResponseEntity<Void> desativaCategoria(@PathVariable Long id){
         try {
             categoriaService.delete(id);
@@ -66,7 +66,7 @@ public class CategoriaController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{idMesa}")
     public ResponseEntity<CategoriaResponseDTO> update(@PathVariable Long id, @RequestBody @Valid CategoriaRequestDTO dto) {
         try {
             return ResponseEntity.ok(categoriaService.atualizaCategoria(id, dto));

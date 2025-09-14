@@ -22,7 +22,7 @@ public class ProdutoController {
         return ResponseEntity.ok(produtoService.findAll());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{idMesa}")
     public ResponseEntity<ProdutoResponseDTO> findById(@PathVariable Long id){
         return ResponseEntity.ok(produtoService.findById(id));
     }
@@ -32,12 +32,12 @@ public class ProdutoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{idMesa}")
     public ResponseEntity<ProdutoResponseDTO> atualizar(@PathVariable Long id, @RequestBody ProdutoRequestDTO dto){
         return ResponseEntity.ok(produtoService.atualizarProduto(id, dto));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{idMesa}")
     public ResponseEntity<ProdutoResponseDTO> desativaProduto(@PathVariable Long id){
         produtoService.desativarProduto(id);
         return ResponseEntity.noContent().build();

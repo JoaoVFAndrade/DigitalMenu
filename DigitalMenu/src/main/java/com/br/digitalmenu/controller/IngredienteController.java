@@ -32,8 +32,8 @@ public class IngredienteController {
         return ingredienteService.findAllAtivos();
     }
 
-    @Operation(summary = "Lista pelo id")
-    @GetMapping("/{id}")
+    @Operation(summary = "Lista pelo idMesa")
+    @GetMapping("/{idMesa}")
     public ResponseEntity<IngredienteResponseDTO> getByid(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(ingredienteService.findById(id));
@@ -50,7 +50,7 @@ public class IngredienteController {
     }
 
     @Operation(summary = "Ativa um ingrediente")
-    @PatchMapping("/{id}")
+    @PatchMapping("/{idMesa}")
     public ResponseEntity<IngredienteResponseDTO> ativaIngrediente(@PathVariable @Valid Long id) {
         try {
             ingredienteService.ativaIngrediente(id);
@@ -61,7 +61,7 @@ public class IngredienteController {
     }
 
     @Operation(summary = "Desativa um ingrediente")
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{idMesa}")
     public ResponseEntity<Void> desativaIngrediente(@PathVariable Long id) {
         try {
             ingredienteService.delete(id);
@@ -72,7 +72,7 @@ public class IngredienteController {
     }
 
     @Operation(summary = "Atualiza ingrediente")
-    @PutMapping("/{id}")
+    @PutMapping("/{idMesa}")
     public ResponseEntity<IngredienteResponseDTO> atualizaIngredientes(@PathVariable Long id, @RequestBody @Valid IngredienteRequestDTO ingredienteRequestDTO){
         try{
             return ResponseEntity.ok(ingredienteService.atualizaIngrediente(id, ingredienteRequestDTO));

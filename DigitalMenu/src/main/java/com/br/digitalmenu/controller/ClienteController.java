@@ -29,17 +29,17 @@ public class ClienteController {
         return ResponseEntity.ok(clienteService.listarTodos());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{idMesa}")
     public ResponseEntity<ClienteResponseDTO> buscar(@PathVariable Long id) {
         return ResponseEntity.ok(clienteService.buscarPorId(id));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{idMesa}")
     public ResponseEntity<ClienteResponseDTO> atualizar(@PathVariable Long id, @Valid @RequestBody ClienteRequestDTO dto) {
         return ResponseEntity.ok(clienteService.atualizar(id, dto));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{idMesa}")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         clienteService.deletar(id);
         return ResponseEntity.noContent().build();

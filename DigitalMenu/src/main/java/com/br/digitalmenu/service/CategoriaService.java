@@ -35,7 +35,7 @@ public class CategoriaService {
 
     public CategoriaResponseDTO findById(Long id) {
        Categoria categoria = categoriaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Categoria não encontrada com id " + id));
+                .orElseThrow(() -> new RuntimeException("Categoria não encontrada com idMesa " + id));
 
         return new CategoriaResponseDTO(categoria.getIdCategoria(), categoria.getNomeCategoria(), categoria.getAtivo());
     }
@@ -53,19 +53,19 @@ public class CategoriaService {
         categoriaRepository.findById(id).map(categoria -> {
             categoria.setAtivo(false);
             return categoriaRepository.save(categoria);
-        }).orElseThrow(() -> new RuntimeException("Categoria nao encontrada com id " + id));
+        }).orElseThrow(() -> new RuntimeException("Categoria nao encontrada com idMesa " + id));
     }
 
     public void ativaCategoria(Long id){
         categoriaRepository.findById(id).map(categoria -> {
             categoria.setAtivo(true);
             return categoriaRepository.save(categoria);
-        }).orElseThrow(() -> new RuntimeException("Categoria nao encontrada com id " + id));
+        }).orElseThrow(() -> new RuntimeException("Categoria nao encontrada com idMesa " + id));
     }
 
     public CategoriaResponseDTO atualizaCategoria(Long id, CategoriaRequestDTO dto) {
         Categoria categoria = categoriaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Categoria não encontrada com id " + id));
+                .orElseThrow(() -> new RuntimeException("Categoria não encontrada com idMesa " + id));
 
         categoria.setNomeCategoria(dto.getNomeCategoria());
 
