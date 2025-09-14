@@ -11,7 +11,9 @@ import com.br.digitalmenu.validacoes.mapper.ProdutoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 @Service
 public class ProdutoService {
@@ -96,8 +98,14 @@ public class ProdutoService {
         produto.setCategoria(categoriaRepository.findById(dto.getIdCategoria())
                 .orElseThrow(() -> new RuntimeException("Categoria não encontrada")));
 
-        produto.setIngrediente(ingredienteRepository.findAllById(dto.getIngredientesIds()));
-        produto.setRestricao(restricaoRepository.findAllById(dto.getRestricoesIds()));
+        if(dto.getIngredientesIds() != null){
+            produto.setIngrediente(ingredienteRepository.findAllById(dto.getIngredientesIds()));
+        }
+
+        if(dto.getRestricoesIds() != null){
+            produto.setRestricao(restricaoRepository.findAllById(dto.getRestricoesIds()));
+        }
+
         produto.setDiasSemana(diaSemanaRepository.findAllById(dto.getDiasSemanaIds()));
 
         Produto salvo = produtoRepository.save(produto);
@@ -116,10 +124,14 @@ public class ProdutoService {
                 .estoque(produto.getEstoque())
                 .ativo(produto.getAtivo())
                 .nomeCategoria(produto.getCategoria().getNomeCategoria())
-                .ingredientes(produto.getIngrediente().stream()
+                .ingredientes(Optional.ofNullable(produto.getIngrediente())
+                        .orElse(Collections.emptyList())
+                        .stream()
                         .map(Ingrediente::getNomeIngrediente)
                         .collect(Collectors.toList()))
-                .restricoes(produto.getRestricao().stream()
+                .restricoes(Optional.ofNullable(produto.getRestricao())
+                        .orElse(Collections.emptyList())
+                        .stream()
                         .map(Restricao::getNomeRestricao)
                         .collect(Collectors.toList()))
                 .diasSemana(produto.getDiasSemana().stream()

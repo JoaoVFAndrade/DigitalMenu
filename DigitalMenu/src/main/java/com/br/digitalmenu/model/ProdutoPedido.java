@@ -3,12 +3,14 @@ package com.br.digitalmenu.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Data
 @Entity
+@ToString(exclude = "pedido")
 public class ProdutoPedido {
 
     @Id
