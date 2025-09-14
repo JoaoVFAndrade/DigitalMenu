@@ -10,15 +10,15 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class IngredienteResponseDTO {
-    private Long idIgrediente;
-    private String nomeIgrediente;
+    private Long idIngrediente;
+    private String nomeIngrediente;
     private Boolean estoque;
     private boolean ativo;
     private List<String> restricoes;
 
     public IngredienteResponseDTO(Ingrediente ingrediente) {
-        this.idIgrediente = ingrediente.getIdIngrediente();
-        this.nomeIgrediente = ingrediente.getNomeIngrediente();
+        this.idIngrediente = ingrediente.getIdIngrediente();
+        this.nomeIngrediente = ingrediente.getNomeIngrediente();
         this.estoque = ingrediente.getEstoque();
         this.ativo = ingrediente.getAtivo();
         this.restricoes = ingrediente.getRestricoes().stream().map(Restricao::getNomeRestricao).toList();
