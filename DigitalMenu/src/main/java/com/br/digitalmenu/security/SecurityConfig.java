@@ -21,8 +21,13 @@ public class SecurityConfig {
                                 "/swagger-ui.html")
                         .permitAll()
 
-                        .requestMatchers("/auth/**", "/clientes/cadastrar"
-                                ,"/clientes/confirmar").permitAll()
+                        .requestMatchers(
+                                "/auth/**",
+                                "/clientes/cadastrar",
+                                "/clientes/confirmar",
+                                "/clientes/reenviar-codigo",
+                                "/recuperacao/**"
+                        ).permitAll()
 
                         .requestMatchers("/adm/**").hasAuthority("FUNCIONARIO_ADM")
 

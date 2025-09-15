@@ -58,4 +58,42 @@ public class EmailService {
 
         mailSender.send(message);
     }
+
+    public void enviarCodigoRecuperacaoSenha(String email, String codigo) throws MessagingException {
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+        helper.setTo(email);
+        helper.setSubject("Recuperação de Senha - DigitalMenu");
+
+        String conteudoHtml = """
+                <html>
+                  <body style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;">
+                    <div style="max-width: 600px; margin: auto; background: #ffffff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                
+                      <div style="text-align: center;">
+                        <img src="cid:logoDigitalMenu" alt="Logo DigitalMenu" style="width: 150px; margin-bottom: 20px;">
+                      </div>
+                
+                      <h2 style="color: #E45E25; text-align: center;">Recuperação de Senha</h2>
+                      <p>Olá,</p>
+                      <p>Recebemos uma solicitação para redefinir a sua senha no <strong>DigitalMenu</strong>.</p>
+                      <p style="font-size: 16px;">O seu código de recuperação é:</p>
+                      <h1 style="color: #ffffff; background: #E45E25; padding: 10px; text-align: center; border-radius: 5px;">%s</h1>
+                      <p>⚠️ Este código é válido por apenas <strong>5 minutos</strong>.</p>
+                      <p>Se você não solicitou a recuperação, ignore este e-mail. Sua senha permanecerá inalterada.</p>
+                      <br>
+                      <p style="text-align: center; color: #777;">Equipe DigitalMenu</p>
+                    </div>
+                  </body>
+                </html>
+                """.formatted(codigo);
+
+        helper.setText(conteudoHtml, true);
+
+        ClassPathResource logo = new ClassPathResource("static/logo.png");
+        helper.addInline("logoDigitalMenu", logo);
+
+        mailSender.send(message);
+    }
 }
