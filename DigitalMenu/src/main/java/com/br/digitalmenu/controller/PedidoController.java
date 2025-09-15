@@ -31,7 +31,7 @@ public class PedidoController {
     @GetMapping("/finalizados")
     public List<PedidoResponseDTO> getAllFinalizado(){return pedidoService.findAllFinalizado();}
 
-    @GetMapping("/{idMesa}")
+    @GetMapping("/{id}")
     public ResponseEntity<PedidoResponseDTO> getById(@PathVariable Long id){
         try {
             return ResponseEntity.ok(pedidoService.findById(id));
@@ -46,7 +46,7 @@ public class PedidoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
-    @DeleteMapping("/{idMesa}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> cancelaPedido(@PathVariable Long id){
         try {
             pedidoService.delete(id);
@@ -56,7 +56,7 @@ public class PedidoController {
         }
     }
 
-    @PutMapping("/{idMesa}")
+    @PutMapping("/{id}")
     public ResponseEntity<PedidoResponseDTO> atualizaPedido(@PathVariable Long id, @RequestBody @Valid PedidoRequestDTO pedidoRequestDTO){
         try {
             return ResponseEntity.ok(pedidoService.atualizaPedido(id, pedidoRequestDTO));

@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotNull;
 public record MesaResponseDTO(
         @NotNull
         @EntityExists(entityClass = Mesa.class)
-        Long idMesa,
+        Long id,
         String numeroMesa,
         Boolean ativo,
         @Min(1)

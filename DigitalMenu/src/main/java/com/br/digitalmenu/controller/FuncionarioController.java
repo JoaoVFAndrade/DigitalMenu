@@ -33,17 +33,17 @@ public class FuncionarioController {
         return ResponseEntity.ok(funcionarioService.buscarPorEmail(email));
     }
 
-    @GetMapping("/{idMesa}")
+    @GetMapping("/{id}")
     public ResponseEntity<FuncionarioResponseDTO> buscarPorId(@PathVariable Long id) {
         return ResponseEntity.ok(funcionarioService.buscarPorId(id));
     }
 
-    @PutMapping("/{idMesa}")
+    @PutMapping("/{id}")
     public ResponseEntity<FuncionarioResponseDTO> atualizar(@PathVariable Long id, @RequestBody FuncionarioRequestDTO dto) {
         return ResponseEntity.ok(funcionarioService.atualizarFuncionario(id, dto));
     }
 
-    @DeleteMapping("/{idMesa}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         funcionarioService.deletarFuncionario(id);
         return ResponseEntity.noContent().build();

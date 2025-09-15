@@ -38,7 +38,7 @@ public class IngredienteService {
 
     public IngredienteResponseDTO findById(Long id){
         Ingrediente ingrediente = ingredienteRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Ingrediente nao encontrado com idMesa:" + id ));
+                .orElseThrow(() -> new RuntimeException("Ingrediente nao encontrado com id:" + id ));
 
         return new IngredienteResponseDTO(ingrediente);
     }
@@ -57,18 +57,18 @@ public class IngredienteService {
     public void delete(Long id){
         ingredienteRepository.findById(id).map(ingrediente -> {ingrediente.setAtivo(false);
         return ingredienteRepository.save(ingrediente);
-        }).orElseThrow(() -> new RuntimeException("Ingrediente nao encontrado com idMesa "+ id));
+        }).orElseThrow(() -> new RuntimeException("Ingrediente nao encontrado com id "+ id));
     }
 
     public void ativaIngrediente(Long id){
         ingredienteRepository.findById(id).map(ingrediente -> {ingrediente.setAtivo(true);
         return ingredienteRepository.save(ingrediente);
-        }).orElseThrow(() -> new RuntimeException("Ingrediente nao encontrado com idMesa " + id));
+        }).orElseThrow(() -> new RuntimeException("Ingrediente nao encontrado com id " + id));
     }
 
     public IngredienteResponseDTO atualizaIngrediente(Long id, IngredienteRequestDTO dto){
         Ingrediente ingrediente = ingredienteRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Ingrediente nao encontrado com idMesa "+ id));
+                .orElseThrow(() -> new RuntimeException("Ingrediente nao encontrado com id "+ id));
         if (dto.getNomeIngrediente() != null) {
             ingrediente.setNomeIngrediente(dto.getNomeIngrediente());
         }
