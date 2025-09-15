@@ -61,7 +61,7 @@ public class MesaService {
     }
 
     public ResponseEntity<?> updateMesa(MesaResponseDTO mesaResponseDTO){
-        Mesa mesa = mesaRepository.getReferenceById(mesaResponseDTO.id());
+        Mesa mesa = mesaRepository.getReferenceById(mesaResponseDTO.idMesa());
 
         if(mesaResponseDTO.numeroMesa() != null && !mesaResponseDTO.numeroMesa().isBlank()){
             mesa.setNumeroMesa(mesaResponseDTO.numeroMesa());
