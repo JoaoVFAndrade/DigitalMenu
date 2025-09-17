@@ -15,6 +15,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 @Service
 public class ProdutoService {
 
@@ -37,17 +39,17 @@ public class ProdutoService {
     private ProdutoMapper produtoMapper;
 
 
-    public List<ProdutoResponseDTO> findAll(){
+    public List<ProdutoResponseDTO> findAll() {
         return produtoRepository.findAll().stream().map(this::toDTO).collect(Collectors.toList());
     }
 
-    public ProdutoResponseDTO findById(Long id){
+    public ProdutoResponseDTO findById(Long id) {
         return produtoRepository.findById(id)
                 .map(this::toDTO)
-                .orElseThrow(() ->new RuntimeException("Produto nao encontrado"));
+                .orElseThrow(() -> new RuntimeException("Produto nao encontrado"));
     }
 
-    public ProdutoResponseDTO atualizarProduto(Long id,ProdutoRequestDTO dto){
+    public ProdutoResponseDTO atualizarProduto(Long id, ProdutoRequestDTO dto) {
         Produto produto = produtoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Produto nao encontrato"));
 
@@ -57,31 +59,31 @@ public class ProdutoService {
 
         produtoMapper.atualizaProduto(dto, produto);
 
-        if (dto.getIdCategoria() != null){
+        if (dto.getIdCategoria() != null) {
             produto.setCategoria(categoriaRepository.findById(dto.getIdCategoria())
                     .orElseThrow(() -> new RuntimeException("Categoria nao encontraa")));
         }
 
-        if (dto.getIngredientesIds() != null){
+        if (dto.getIngredientesIds() != null) {
             produto.setIngrediente(ingredienteRepository.findAllById(dto.getIngredientesIds()));
         }
 
-        if (dto.getRestricoesIds() != null){
+        if (dto.getRestricoesIds() != null) {
             produto.setRestricao(restricaoRepository.findAllById(dto.getRestricoesIds()));
         }
 
-        if (dto.getDiasSemanaIds() != null){
+        if (dto.getDiasSemanaIds() != null) {
             produto.setDiasSemana(diaSemanaRepository.findAllById(dto.getDiasSemanaIds()));
         }
         Produto atualizado = produtoRepository.save(produto);
         return toDTO(atualizado);
     }
 
-    public void desativarProduto(Long id){
+    public void desativarProduto(Long id) {
         produtoRepository.findById(id).map(produto -> {
             produto.setAtivo(false);
             return produtoRepository.save(produto);
-        }).orElseThrow(()-> new RuntimeException("Produto nao encontrado"));
+        }).orElseThrow(() -> new RuntimeException("Produto nao encontrado"));
     }
 
 
@@ -98,11 +100,11 @@ public class ProdutoService {
         produto.setCategoria(categoriaRepository.findById(dto.getIdCategoria())
                 .orElseThrow(() -> new RuntimeException("Categoria não encontrada")));
 
-        if(dto.getIngredientesIds() != null){
+        if (!dto.getIngredientesIds().isEmpty()) {
             produto.setIngrediente(ingredienteRepository.findAllById(dto.getIngredientesIds()));
         }
 
-        if(dto.getRestricoesIds() != null){
+        if (!dto.getRestricoesIds().isEmpty()) {
             produto.setRestricao(restricaoRepository.findAllById(dto.getRestricoesIds()));
         }
 
@@ -129,11 +131,25 @@ public class ProdutoService {
                         .stream()
                         .map(Ingrediente::getNomeIngrediente)
                         .collect(Collectors.toList()))
-                .restricoes(Optional.ofNullable(produto.getRestricao())
-                        .orElse(Collections.emptyList())
-                        .stream()
-                        .map(Restricao::getNomeRestricao)
-                        .collect(Collectors.toList()))
+                .restricoes(
+                        Stream.concat(
+                                        // restrições diretas do produto
+                                        Optional.ofNullable(produto.getRestricao())
+                                                .orElse(Collections.emptyList())
+                                                .stream()
+                                                .map(Restricao::getNomeRestricao),
+                                        // restrições vindas dos ingredientes
+                                        Optional.ofNullable(produto.getIngrediente())
+                                                .orElse(Collections.emptyList())
+                                                .stream()
+                                                .flatMap(i -> Optional.ofNullable(i.getRestricoes())
+                                                        .orElse(Collections.emptyList())
+                                                        .stream()
+                                                        .map(Restricao::getNomeRestricao))
+                                )
+                                .distinct() // remove duplicados
+                                .collect(Collectors.toList())
+                )
                 .diasSemana(produto.getDiasSemana().stream()
                         .map(DiaSemana::getNomeDia)
                         .collect(Collectors.toList()))
