@@ -18,7 +18,7 @@ public class ClienteController {
     @Autowired
     private ClienteService clienteService;
 
-    @PostMapping
+    @PostMapping("/cadastro")
     public ResponseEntity<ClienteResponseDTO> criar(@Valid @RequestBody ClienteRequestDTO dto) {
         ClienteResponseDTO responseDTO = clienteService.salvar(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
