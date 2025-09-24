@@ -19,6 +19,17 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
+        String path = request.getRequestURI();
+
+        if (path.startsWith("/clientes/cadastro")
+                || path.startsWith("/auth/")
+                || path.startsWith("/clientes/confirmar")
+                || path.startsWith("/clientes/reenviar-codigo")
+                || path.startsWith("/recuperacao/")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         String header = request.getHeader("Authorization");
 
         if (header != null && header.startsWith("Bearer ")) {
@@ -30,7 +41,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 String user = claims.getSubject();
                 List<String> roles = claims.get("roles", List.class);
 
-                // transforma roles em authorities para o Spring
+                // Transforma roles em authorities para o Spring
                 var authorities = roles.stream()
                         .map(r -> new SimpleGrantedAuthority("ROLE_" + r)) // ROLE_FUNCIONARIO_ADM etc.
                         .collect(Collectors.toList());

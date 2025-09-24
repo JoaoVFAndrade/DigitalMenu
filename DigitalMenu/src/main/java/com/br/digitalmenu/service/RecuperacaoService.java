@@ -7,6 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 @Service
 public class RecuperacaoService {
 
@@ -22,6 +26,8 @@ public class RecuperacaoService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    private final Map<String, RecuperacaoService.CodigoInfo> codigos = new ConcurrentHashMap<>();
+
     public void enviarCodigoRecuperacao(String email) throws MessagingException {
         Cliente cliente = clienteRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("E-mail nao encontrado"));
@@ -31,7 +37,23 @@ public class RecuperacaoService {
     }
 
     public boolean validarCodigo(String email, String codigo) {
-        return verificacaoService.validarCodigo(email, codigo);
+        CodigoInfo info = codigos.get(email);
+        if (info == null) return false;
+
+        if (info.expira.isBefore(LocalDateTime.now())) {
+            codigos.remove(email);
+            return false;
+        }
+
+        boolean valido = info.codigo.equals(codigo);
+        if (valido) {
+            codigos.remove(email);
+        }
+        return valido;
+    }
+
+    public void removerCodigo(String email) {
+        codigos.remove(email);
     }
 
     public void redefinirSenha(String email, String novaSenha) {
@@ -42,4 +64,6 @@ public class RecuperacaoService {
         clienteRepository.save(cliente);
         verificacaoService.removerCodigo(email);
     }
+
+    private record CodigoInfo(String codigo, LocalDateTime expira, LocalDateTime ultimoEnvio) {}
 }

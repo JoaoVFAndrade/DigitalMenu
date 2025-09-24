@@ -18,7 +18,7 @@ public class ClienteController {
     @Autowired
     private ClienteService clienteService;
 
-    @PostMapping("/cadastrar")
+    @PostMapping("/cadastro")
     public ResponseEntity<ClienteResponseDTO> criar(@Valid @RequestBody ClienteRequestDTO dto) throws MessagingException {
         return ResponseEntity.ok(clienteService.salvar(dto));
     }

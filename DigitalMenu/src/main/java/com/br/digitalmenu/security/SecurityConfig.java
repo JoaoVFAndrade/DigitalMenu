@@ -8,38 +8,77 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
 public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http.csrf(csrf -> csrf.disable())
+        http
+                // Desabilita CSRF
+                .csrf(csrf -> csrf.disable())
+
+                // Configura CORS
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+
+                // Configura autorização das requisições
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
-                                "/swagger-ui.html")
-                        .permitAll()
-
+                                "/swagger-ui.html"
+                        ).permitAll()
                         .requestMatchers(
                                 "/auth/**",
-                                "/clientes/cadastrar",
+                                "/clientes/cadastro",
                                 "/clientes/confirmar",
                                 "/clientes/reenviar-codigo",
                                 "/recuperacao/**"
                         ).permitAll()
+                        // acessos do adm ->
+                        .requestMatchers("/adm/**",
+                                "/categorias/**",
+                                "/ingredientes/**",
+                                "/restricoes/**",
+                                "/produtos/**",
+                                "/funcionarios/**",
+                                "/diaSemana/**"
+                        ).hasAuthority("FUNCIONARIO_ADM")
 
-                        .requestMatchers("/adm/**").hasAuthority("FUNCIONARIO_ADM")
-
-                        .requestMatchers("/garcom/**").hasAuthority("FUNCIONARIO_GARCOM")
-
-                        .requestMatchers(HttpMethod.GET, "/clientes/**", "/ingredientes/**",
-                                "/restricoes/**", "/produtos/**", "/funcionarios/**",
-                                "/diaSemana/**", "/categorias/**").hasAuthority("CLIENTE")
+                        .requestMatchers("/garcom/**").hasAuthority("FUNCIONARIO_GARCOM") //TODO ajustar os endpoitns que o garcom pode acessar
+                        // Acessos do cliente ->
+                        .requestMatchers(HttpMethod.GET,
+                                "/clientes/**",
+                                "/ingredientes/**",
+                                "/restricoes/**",
+                                "/produtos/**",
+                                "/funcionarios/**",
+                                "/diaSemana/**",
+                                "/categorias/**"
+                        ).hasAuthority("CLIENTE")
                         .anyRequest().authenticated()
-                )
-                .addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class)
-                .build();
+                );
+
+        // Adiciona o filtro JWT
+        http.addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
+    }
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOriginPatterns(List.of("http://localhost:4200"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 
     @Bean

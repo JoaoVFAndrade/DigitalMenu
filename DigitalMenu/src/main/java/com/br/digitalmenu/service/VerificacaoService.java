@@ -1,11 +1,15 @@
 package com.br.digitalmenu.service;
 
+import com.br.digitalmenu.exception.BadRequestException;
+import com.br.digitalmenu.exception.ResourceNotFoundException;
 import com.br.digitalmenu.model.Cliente;
 import com.br.digitalmenu.repository.ClienteRepository;
+import com.br.digitalmenu.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
@@ -37,20 +41,30 @@ public class VerificacaoService {
         return codigo;
     }
 
-    public boolean validarCodigo(String email, String codigoDigitado) {
+    public String confirmarCodigoELogin(String email, String codigoDigitado) {
         CodigoInfo info = codigos.get(email);
-        if (info == null) return false;
+        if (info == null) {
+            throw new ResourceNotFoundException("Código não encontrado para o e-mail: " + email);
+        }
 
         if (info.expira.isBefore(LocalDateTime.now())) {
             codigos.remove(email);
-            return false;
+            throw new BadRequestException("Código expirado");
         }
 
-        boolean valido = info.codigo.equals(codigoDigitado);
-        if (valido) {
-            codigos.remove(email);
+        if (!info.codigo.equals(codigoDigitado)) {
+            throw new BadRequestException("Código inválido");
         }
-        return valido;
+
+        codigos.remove(email);
+
+        Cliente cliente = clienteRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado"));
+
+        cliente.setEmailValidado(true);
+        clienteRepository.save(cliente);
+
+        return JwtUtil.generateToken(cliente.getEmail(), List.of("CLIENTE"));
     }
 
     public void removerCodigo(String email) {

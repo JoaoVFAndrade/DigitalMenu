@@ -1,11 +1,9 @@
 package com.br.digitalmenu.controller;
 
+import com.br.digitalmenu.dto.request.LoginRequest;
 import com.br.digitalmenu.service.AuthService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -17,16 +15,14 @@ public class AuthController {
     }
 
     @PostMapping("/funcionario/login")
-    public ResponseEntity<String> loginFuncionario(@RequestParam String username,
-                                                   @RequestParam String password) {
-        String token = authService.loginFuncionario(username, password);
+    public ResponseEntity<String> loginFuncionario(@RequestBody LoginRequest loginRequest) {
+        String token = authService.loginFuncionario(loginRequest.getEmail(), loginRequest.getSenha());
         return ResponseEntity.ok(token);
     }
 
     @PostMapping("/cliente/login")
-    public ResponseEntity<String> loginCliente(@RequestParam String email,
-                                               @RequestParam String senha) {
-        String token = authService.loginCliente(email, senha);
+    public ResponseEntity<String> loginCliente(@RequestBody LoginRequest loginRequest) {
+        String token = authService.loginCliente(loginRequest.getEmail(), loginRequest.getSenha());
         return ResponseEntity.ok(token);
     }
 }

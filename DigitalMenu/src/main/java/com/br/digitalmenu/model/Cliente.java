@@ -7,6 +7,8 @@ import jakarta.validation.constraints.Past;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity(name = "cliente")
 @Data
@@ -37,4 +39,6 @@ public class Cliente {
     @Column(nullable = false)
     private boolean emailValidado = false;
 
+    @Enumerated(EnumType.STRING)
+    private RoleNome role = RoleNome.CLIENTE;
 }
