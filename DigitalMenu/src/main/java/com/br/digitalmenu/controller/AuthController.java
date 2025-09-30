@@ -1,7 +1,11 @@
 package com.br.digitalmenu.controller;
 
 import com.br.digitalmenu.dto.request.LoginRequest;
+import com.br.digitalmenu.dto.response.LoginResponseDTO;
+import com.br.digitalmenu.model.Cliente;
+import com.br.digitalmenu.repository.ClienteRepository;
 import com.br.digitalmenu.service.AuthService;
+import com.br.digitalmenu.service.ClienteService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,9 +13,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 public class AuthController {
     private final AuthService authService;
+    private final ClienteRepository clienteRepository;
 
-    public AuthController(AuthService authService) {
+    public AuthController(AuthService authService, ClienteRepository clienteRepository) {
         this.authService = authService;
+        this.clienteRepository = clienteRepository;
     }
 
     @PostMapping("/funcionario/login")
@@ -21,8 +27,14 @@ public class AuthController {
     }
 
     @PostMapping("/cliente/login")
-    public ResponseEntity<String> loginCliente(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<LoginResponseDTO> loginCliente(@RequestBody LoginRequest loginRequest) {
         String token = authService.loginCliente(loginRequest.getEmail(), loginRequest.getSenha());
-        return ResponseEntity.ok(token);
+
+        Cliente cliente = clienteRepository.findByEmail(loginRequest.getEmail())
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        LoginResponseDTO response = new LoginResponseDTO(token, cliente.getNome());
+
+        return ResponseEntity.ok(response);
     }
 }

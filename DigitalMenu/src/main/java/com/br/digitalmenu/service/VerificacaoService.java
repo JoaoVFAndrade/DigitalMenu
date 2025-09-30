@@ -1,5 +1,6 @@
 package com.br.digitalmenu.service;
 
+import com.br.digitalmenu.dto.response.LoginResponseDTO;
 import com.br.digitalmenu.exception.BadRequestException;
 import com.br.digitalmenu.exception.ResourceNotFoundException;
 import com.br.digitalmenu.model.Cliente;
@@ -22,6 +23,14 @@ public class VerificacaoService {
     private final Map<String, CodigoInfo> codigos = new ConcurrentHashMap<>();
 
     public String gerarCodigo(String email) {
+        return gerarOuReutilizarCodigo(email, false);
+    }
+
+    public String reenviarCodigo(String email) {
+        return gerarOuReutilizarCodigo(email, true);
+    }
+
+    public String gerarOuReutilizarCodigo(String email, boolean forcarNovo) {
         CodigoInfo info = codigos.get(email);
         LocalDateTime agora = LocalDateTime.now();
 
@@ -31,7 +40,7 @@ public class VerificacaoService {
             throw new RuntimeException("E-mail já confirmado");
         }
 
-        if (info != null && agora.isBefore(info.ultimoEnvio.plusMinutes(5))) {
+        if (!forcarNovo && info != null && agora.isBefore(info.ultimoEnvio.plusMinutes(5))) {
             return info.codigo;
         }
 
@@ -41,7 +50,7 @@ public class VerificacaoService {
         return codigo;
     }
 
-    public String confirmarCodigoELogin(String email, String codigoDigitado) {
+    public LoginResponseDTO confirmarCodigoELogin(String email, String codigoDigitado) {
         CodigoInfo info = codigos.get(email);
         if (info == null) {
             throw new ResourceNotFoundException("Código não encontrado para o e-mail: " + email);
@@ -64,12 +73,14 @@ public class VerificacaoService {
         cliente.setEmailValidado(true);
         clienteRepository.save(cliente);
 
-        return JwtUtil.generateToken(cliente.getEmail(), List.of("CLIENTE"));
+        String token = JwtUtil.generateToken(cliente.getEmail(), List.of("CLIENTE"));
+        return new LoginResponseDTO(token, cliente.getNome());
     }
 
     public void removerCodigo(String email) {
         codigos.remove(email);
     }
 
-    private record CodigoInfo(String codigo, LocalDateTime expira, LocalDateTime ultimoEnvio) {}
+    private record CodigoInfo(String codigo, LocalDateTime expira, LocalDateTime ultimoEnvio) {
+    }
 }
