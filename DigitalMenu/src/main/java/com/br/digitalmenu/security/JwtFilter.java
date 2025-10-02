@@ -43,7 +43,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
                 // Transforma roles em authorities para o Spring
                 var authorities = roles.stream()
-                        .map(r -> new SimpleGrantedAuthority("ROLE_" + r)) // ROLE_FUNCIONARIO_ADM etc.
+                        .map(SimpleGrantedAuthority::new) // ROLE_FUNCIONARIO_ADM etc.
                         .collect(Collectors.toList());
 
                 var authentication =

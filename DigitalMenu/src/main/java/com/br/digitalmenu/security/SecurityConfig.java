@@ -59,7 +59,7 @@ public class SecurityConfig {
                                 "/funcionarios/**",
                                 "/diaSemana/**",
                                 "/categorias/**"
-                        ).hasAuthority("CLIENTE")
+                        ).hasAnyAuthority("CLIENTE", "FUNCIONARIO_ADM")
                         .anyRequest().authenticated()
                 );
 
