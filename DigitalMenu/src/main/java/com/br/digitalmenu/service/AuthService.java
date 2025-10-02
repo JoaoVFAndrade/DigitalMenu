@@ -1,5 +1,6 @@
 package com.br.digitalmenu.service;
 
+import com.br.digitalmenu.exception.ResourceNotFoundException;
 import com.br.digitalmenu.model.Cliente;
 import com.br.digitalmenu.model.Funcionario;
 import com.br.digitalmenu.repository.ClienteRepository;
@@ -28,7 +29,7 @@ public class AuthService {
 
     public String loginFuncionario(String email, String senha) {
         Funcionario funcionario = funcionarioRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Funcionário não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Funcionário não encontrado"));
 
         // compara a senha digitada com a hash do banco
         if (!passwordEncoder.matches(senha, funcionario.getSenha())) {
@@ -41,7 +42,7 @@ public class AuthService {
     public String loginCliente(String email, String senha) {
         logger.info("Login attempt - email=[{}] senhaRecebida.length=[{}]", email, senha == null ? 0 : senha.length());
         Cliente cliente = clienteRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado"));
         logger.info("Hash do DB para email [{}] = {}", email, cliente.getSenha());
 
         String senhaTrim = senha == null ? "" : senha.trim();

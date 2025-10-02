@@ -27,6 +27,7 @@ public class SecurityConfig {
 
                 // Configura autorização das requisições
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
                         .requestMatchers(
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
