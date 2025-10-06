@@ -3,10 +3,12 @@ package com.br.digitalmenu.service;
 
 import com.br.digitalmenu.dto.request.FuncionarioRequestDTO;
 import com.br.digitalmenu.dto.response.FuncionarioResponseDTO;
+import com.br.digitalmenu.exception.ResourceNotFoundException;
 import com.br.digitalmenu.model.Funcionario;
 import com.br.digitalmenu.model.RoleNome;
 import com.br.digitalmenu.repository.FuncionarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,11 +20,15 @@ public class FuncionarioService {
     @Autowired
     private FuncionarioRepository funcionarioRepository;
 
-    public FuncionarioResponseDTO salvar(FuncionarioRequestDTO dto) {
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    public FuncionarioResponseDTO criarFuncionario(FuncionarioRequestDTO dto) {
+
         Funcionario funcionario = new Funcionario();
         funcionario.setNome(dto.getNome());
         funcionario.setEmail(dto.getEmail());
-        funcionario.setSenha(dto.getSenha());
+        funcionario.setSenha(passwordEncoder.encode(dto.getSenha()));
 
         if (dto.getRoles() != null) {
             var roles = dto.getRoles().stream()
@@ -50,7 +56,7 @@ public class FuncionarioService {
 
     public FuncionarioResponseDTO buscarPorEmail(String email) {
         Funcionario funcionario = funcionarioRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Funcionario nao encontrado com email: " + email));
+                .orElseThrow(() -> new ResourceNotFoundException("Funcionario nao encontrado com email: " + email));
         return mapToDTO(funcionario);
     }
 
