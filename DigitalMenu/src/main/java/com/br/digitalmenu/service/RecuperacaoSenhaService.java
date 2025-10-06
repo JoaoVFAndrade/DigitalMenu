@@ -1,6 +1,7 @@
 package com.br.digitalmenu.service;
 
 import com.br.digitalmenu.dto.request.ResetTokenInfo;
+import com.br.digitalmenu.exception.ResourceNotFoundException;
 import com.br.digitalmenu.model.Cliente;
 import com.br.digitalmenu.model.Funcionario;
 import com.br.digitalmenu.repository.ClienteRepository;
@@ -36,7 +37,7 @@ public class RecuperacaoSenhaService {
         Optional<Funcionario> funcionarioOpt = funcionarioRepository.findByEmail(email);
 
         if (clienteOpt.isEmpty() && funcionarioOpt.isEmpty()) {
-            throw new RuntimeException("E-mail não encontrado");
+            throw new ResourceNotFoundException("E-mail não encontrado");
         }
 
         String token = UUID.randomUUID().toString();

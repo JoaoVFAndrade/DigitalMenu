@@ -26,12 +26,17 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
                 // Configura autorização das requisições
+
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
                         .requestMatchers(
+                                "/auth/**",
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
-                                "/swagger-ui.html"
+                                "/swagger-ui.html",
+                                "/clientes/cadastro",
+                                "/clientes/confirmar",
+                                "/clientes/reenviar-codigo",
+                                "/recuperacao/**"
                         ).permitAll()
                         .requestMatchers(
                                 "/auth/**",
