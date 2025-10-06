@@ -3,6 +3,7 @@ package com.br.digitalmenu.controller;
 import com.br.digitalmenu.dto.request.ClienteRequestDTO;
 import com.br.digitalmenu.dto.response.ClienteResponseDTO;
 import com.br.digitalmenu.service.ClienteService;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,8 +19,8 @@ public class ClienteController {
     @Autowired
     private ClienteService clienteService;
 
-    @PostMapping
-    public ResponseEntity<ClienteResponseDTO> criar(@Valid @RequestBody ClienteRequestDTO dto) {
+    @PostMapping("/cadastro")
+    public ResponseEntity<ClienteResponseDTO> criar(@Valid @RequestBody ClienteRequestDTO dto) throws MessagingException {
         ClienteResponseDTO responseDTO = clienteService.salvar(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
