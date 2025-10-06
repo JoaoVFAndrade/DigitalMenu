@@ -7,10 +7,10 @@ import com.br.digitalmenu.model.Ingrediente;
 import com.br.digitalmenu.model.Produto;
 import com.br.digitalmenu.model.Restricao;
 import com.br.digitalmenu.repository.*;
-import com.br.digitalmenu.validacoes.mapper.ProdutoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -36,7 +36,7 @@ public class ProdutoService {
     private RestricaoRepository restricaoRepository;
 
     @Autowired
-    private ProdutoMapper produtoMapper;
+    private CloudinaryService cloudinaryService;
 
 
     public List<ProdutoResponseDTO> findAll() {
@@ -56,8 +56,6 @@ public class ProdutoService {
         if (dto.getPreco() != null) {
             produto.setPreco(dto.getPreco());
         }
-
-        produtoMapper.atualizaProduto(dto, produto);
 
         if (dto.getIdCategoria() != null) {
             produto.setCategoria(categoriaRepository.findById(dto.getIdCategoria())
@@ -87,7 +85,7 @@ public class ProdutoService {
     }
 
 
-    public ProdutoResponseDTO salvar(ProdutoRequestDTO dto) {
+    public ProdutoResponseDTO salvar(ProdutoRequestDTO dto){
         Produto produto = new Produto();
         produto.setNomeProduto(dto.getNomeProduto());
         produto.setPreco(dto.getPreco());

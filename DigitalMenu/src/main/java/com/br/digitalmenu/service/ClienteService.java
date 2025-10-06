@@ -4,7 +4,9 @@ import com.br.digitalmenu.dto.request.ClienteRequestDTO;
 import com.br.digitalmenu.dto.response.ClienteResponseDTO;
 import com.br.digitalmenu.model.Cliente;
 import com.br.digitalmenu.repository.ClienteRepository;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,14 +18,31 @@ public class ClienteService {
     @Autowired
     private ClienteRepository clienteRepository;
 
-    public ClienteResponseDTO salvar(ClienteRequestDTO dto) {
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private VerificacaoService verificacaoService;
+
+    @Autowired
+    private EmailService emailService;
+
+    public ClienteResponseDTO salvar(ClienteRequestDTO dto) throws MessagingException {
         Cliente cliente = new Cliente();
         cliente.setNome(dto.getNome());
         cliente.setEmail(dto.getEmail());
-        cliente.setSenha(dto.getSenha());
+        cliente.setSenha(passwordEncoder.encode(dto.getSenha()));
         cliente.setDataNascimento(dto.getDataNascimento());
+        cliente.setEmailValidado(false);
 
         Cliente salvo = clienteRepository.save(cliente);
+
+        try {
+            String codigo = verificacaoService.gerarCodigo(cliente.getEmail());
+            emailService.enviarCodigoVerificacao(cliente.getEmail(), codigo);
+        }catch (MessagingException e){
+            throw new RuntimeException("Erro ao enviar e-mail", e);
+        }
 
         return toResponseDTO(salvo);
     }
