@@ -7,6 +7,8 @@ import com.br.digitalmenu.model.Categoria;
 import com.br.digitalmenu.service.CategoriaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,7 +42,8 @@ public class CategoriaController {
 
     @PostMapping
     public ResponseEntity<CategoriaResponseDTO> create(@RequestBody @Valid CategoriaRequestDTO dto){
-        return ResponseEntity.ok(categoriaService.save(dto));
+        CategoriaResponseDTO responseDTO = categoriaService.save(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
     @PatchMapping("/{id}")

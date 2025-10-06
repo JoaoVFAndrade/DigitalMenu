@@ -1,0 +1,116 @@
+package com.br.digitalmenu.service;
+
+import com.br.digitalmenu.dto.request.PedidoRequestDTO;
+import com.br.digitalmenu.dto.response.ClienteResponseDTO;
+import com.br.digitalmenu.dto.response.MesaResponseDTO;
+import com.br.digitalmenu.dto.response.PedidoResponseDTO;
+import com.br.digitalmenu.model.Pedido;
+import com.br.digitalmenu.model.StatusPedido;
+import com.br.digitalmenu.repository.ClienteRepository;
+import com.br.digitalmenu.repository.MesaRepository;
+import com.br.digitalmenu.repository.PedidoRepository;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Service
+public class PedidoService {
+    @Autowired
+    private PedidoRepository pedidoRepository;
+
+    @Autowired
+    private MesaRepository mesaRepository;
+
+    @Autowired
+    private ClienteRepository clienteRepository;
+
+    @Autowired
+    private ProdutoPedidoService produtoPedidoService;
+
+    public List<PedidoResponseDTO> findAll(){
+        return pedidoRepository.findAll()
+                .stream()
+                .map(pedido -> new PedidoResponseDTO(pedido.getId(), pedido.getAbertoEm(), pedido.getFinalizadoEm(),
+                        pedido.getStatusPedido(), pedido.getTotal(),new ClienteResponseDTO(pedido.getCliente()) ,new MesaResponseDTO(pedido.getMesa()))).toList();
+    }
+
+    public List<PedidoResponseDTO> findAllAberto(){
+        return pedidoRepository.findByStatusPedido(StatusPedido.ABERTO)
+                .stream()
+                .map(pedido -> new PedidoResponseDTO(pedido.getId(), pedido.getAbertoEm(), pedido.getFinalizadoEm(),
+                        pedido.getStatusPedido(), pedido.getTotal(),new ClienteResponseDTO(pedido.getCliente()) ,new MesaResponseDTO(pedido.getMesa()))).toList();
+    }
+
+    public List<PedidoResponseDTO> findAllFinalizado(){
+        return pedidoRepository.findByStatusPedido(StatusPedido.FINALIZADO)
+                .stream()
+                .map(pedido -> new PedidoResponseDTO(pedido.getId(), pedido.getAbertoEm(), pedido.getFinalizadoEm(),
+                        pedido.getStatusPedido(), pedido.getTotal(),new ClienteResponseDTO(pedido.getCliente()) ,new MesaResponseDTO(pedido.getMesa()))).toList();
+    }
+
+    public PedidoResponseDTO findById(Long id){
+        Pedido pedido = pedidoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Pedido nao encontrado"));
+
+        return new PedidoResponseDTO(pedido.getId(), pedido.getAbertoEm(), pedido.getFinalizadoEm(),
+                pedido.getStatusPedido(), pedido.getTotal(),new ClienteResponseDTO(pedido.getCliente()) ,new MesaResponseDTO(pedido.getMesa()));
+    }
+
+    public PedidoResponseDTO save (@Valid PedidoRequestDTO dto){
+        Pedido pedido = new Pedido();
+        pedido.setAbertoEm(LocalDateTime.now());
+        pedido.setStatusPedido(StatusPedido.ABERTO);
+        pedido.setTotal(BigDecimal.ZERO);
+        pedido.setCliente(clienteRepository.getReferenceById(dto.getIdCliente()));
+        pedido.setMesa(mesaRepository.getReferenceById(dto.getIdMesa()));
+
+        Pedido salvar = pedidoRepository.save(pedido);
+        return new PedidoResponseDTO(salvar.getId(),salvar.getAbertoEm(),salvar.getFinalizadoEm(),
+                salvar.getStatusPedido(), salvar.getTotal(),new ClienteResponseDTO(salvar.getCliente()),new MesaResponseDTO(salvar.getMesa()));
+    }
+
+    public void delete(Long id) {
+        pedidoRepository.findById(id).map(pedido -> {
+            pedido.setStatusPedido(StatusPedido.CANCELADO);
+            pedido.getProdutoPedidos().forEach(produtoPedido -> {
+                produtoPedidoService.cancelarProdutoPedido(produtoPedido.getId());
+            });
+            pedido.setFinalizadoEm(LocalDateTime.now());
+            return pedidoRepository.save(pedido);
+        }).orElseThrow(() -> new RuntimeException("pedido nao encontrado"));
+    }
+
+    public PedidoResponseDTO atualizaPedido(Long id, PedidoRequestDTO dto){
+        Pedido pedido = pedidoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("pedido nao encontrado"));
+
+        if (dto.getTotal() != null) {
+            pedido.setTotal(dto.getTotal());
+        }
+
+        if (dto.getStatusPedido() != null) {
+            pedido.setStatusPedido(dto.getStatusPedido());
+
+            if (dto.getStatusPedido() == StatusPedido.FINALIZADO) {
+                pedido.setFinalizadoEm(
+                        dto.getFinalizadoEm() != null ? dto.getFinalizadoEm() : LocalDateTime.now()
+                );
+            }
+        }
+
+        Pedido atualizado = pedidoRepository.save(pedido);
+        return new PedidoResponseDTO(
+                atualizado.getId(),
+                atualizado.getAbertoEm(),
+                atualizado.getFinalizadoEm(),
+                atualizado.getStatusPedido(),
+                atualizado.getTotal(),
+                new ClienteResponseDTO(atualizado.getCliente()),
+                new MesaResponseDTO(atualizado.getMesa())
+        );
+    }
+}

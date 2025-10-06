@@ -1,9 +1,15 @@
 package com.br.digitalmenu.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity(name = "ingrediente")
@@ -19,7 +25,16 @@ public class Ingrediente {
 
     @Column(name = "em_estoque")
     @NotNull
-    private Integer estoque;
+    private Boolean estoque;
 
     private Boolean ativo;
+
+    @ManyToMany
+    @JoinTable(
+            name = "restricao_ingrediente",
+            joinColumns = @JoinColumn(name = "id_ingrediente"),
+            inverseJoinColumns = @JoinColumn(name = "id_restricao")
+    )
+    @JsonManagedReference
+    private List<Restricao> restricoes;
 }

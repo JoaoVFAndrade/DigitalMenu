@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,7 +45,8 @@ public class IngredienteController {
     @Operation(summary = "Cria um ingrediente")
     @PostMapping
     public ResponseEntity<IngredienteResponseDTO> create(@RequestBody @Valid IngredienteRequestDTO ingredienteRequestDTO) {
-        return ResponseEntity.ok(ingredienteService.save(ingredienteRequestDTO));
+        IngredienteResponseDTO responseDTO = ingredienteService.save(ingredienteRequestDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
     @Operation(summary = "Ativa um ingrediente")

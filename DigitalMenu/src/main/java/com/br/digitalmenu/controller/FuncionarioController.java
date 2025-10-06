@@ -4,6 +4,7 @@ import com.br.digitalmenu.dto.request.FuncionarioRequestDTO;
 import com.br.digitalmenu.dto.response.FuncionarioResponseDTO;
 import com.br.digitalmenu.service.FuncionarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +19,8 @@ public class FuncionarioController {
 
     @PostMapping
     public ResponseEntity<FuncionarioResponseDTO> criar(@RequestBody FuncionarioRequestDTO dto) {
-        return ResponseEntity.ok(funcionarioService.criarFuncionario(dto));
+        FuncionarioResponseDTO responseDTO = funcionarioService.salvar(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
     @GetMapping

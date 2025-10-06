@@ -24,6 +24,8 @@ public class RestricaoService {
 
         restricao.setNomeRestricao(insertRestricaoDTO.nomeRestricao());
 
+        restricao.setTipoRestricao(insertRestricaoDTO.tipoRestricao());
+
         restricaoRepository.save(restricao);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequestUri().build(restricao);
@@ -45,17 +47,17 @@ public class RestricaoService {
     }
 
     public ResponseEntity<?> editarRestricao(RestricaoDTO restricaoDTO){
-        if(restricaoDTO.idRestricao() == 1){
-            return ResponseEntity.badRequest().body("Esta restrição não pode ser alterada");
-        }
 
         Restricao restricao = restricaoRepository.getReferenceById(restricaoDTO.idRestricao());
 
         if(restricaoDTO.nomeRestricao() != null && !restricaoDTO.nomeRestricao().isEmpty())
             restricao.setNomeRestricao(restricaoDTO.nomeRestricao());
 
+        if(restricaoDTO.tipoRestricao() != null)
+            restricao.setTipoRestricao(restricaoDTO.tipoRestricao());
+
         restricaoRepository.save(restricao);
 
-        return ResponseEntity.ok("Restrição alterada com sucesso");
+        return ResponseEntity.ok(restricao);
     }
 }
