@@ -1,5 +1,7 @@
 package com.br.digitalmenu.dto.request;
 
+import com.br.digitalmenu.model.Cliente;
+import com.br.digitalmenu.validacoes.UniqueValue;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Past;
@@ -14,6 +16,7 @@ public class ClienteRequestDTO {
 
     @Email(message = "E-mail inválido")
     @NotBlank(message = "O email é obrigatório")
+    @UniqueValue(entity = Cliente.class, fieldName = "email")
     private String email;
 
     @NotBlank(message = "A senha é obrigatória")

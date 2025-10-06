@@ -16,7 +16,7 @@ public class emailConfig {
         mailSender.setHost("smtp.gmail.com");
         mailSender.setPort(587);
         mailSender.setUsername("digitalmenurestaurantes@gmail.com");
-        mailSender.setPassword("afzw evwf rtck vnfz");
+        mailSender.setPassword("iwzt vtbx arpy fedw");
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");
