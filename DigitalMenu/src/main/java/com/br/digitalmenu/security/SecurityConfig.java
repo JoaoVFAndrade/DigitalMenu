@@ -19,15 +19,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // Desabilita CSRF
                 .csrf(csrf -> csrf.disable())
-
-                // Configura CORS
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-
-                // Configura autorização das requisições
-
                 .authorizeHttpRequests(auth -> auth
+
+                        //Rotas públicas (sem login)
                         .requestMatchers(
                                 "/auth/**",
                                 "/v3/api-docs/**",
@@ -38,15 +34,23 @@ public class SecurityConfig {
                                 "/clientes/reenviar-codigo",
                                 "/recuperacao/**"
                         ).permitAll()
+
+                        //Acesso autenticado (clientes, garçons, admin)
+                        .requestMatchers(HttpMethod.GET,
+                                "/produtos/**",
+                                "/categorias/**",
+                                "/ingredientes/**",
+                                "/restricoes/**",
+                                "/funcionarios/**",
+                                "/diaSemana/**"
+                        ).authenticated()
+
+                        //Acesso do garçom
+                        .requestMatchers("/garcom/**").hasAuthority("FUNCIONARIO_GARCOM")
+                            //@TODO verificar quais rotas o garcom podera acessar
+                        //Acesso do administrador (CRUD completo)
                         .requestMatchers(
-                                "/auth/**",
-                                "/clientes/cadastro",
-                                "/clientes/confirmar",
-                                "/clientes/reenviar-codigo",
-                                "/recuperacao/**"
-                        ).permitAll()
-                        // acessos do adm ->
-                        .requestMatchers("/adm/**",
+                                "/adm/**",
                                 "/categorias/**",
                                 "/ingredientes/**",
                                 "/restricoes/**",
@@ -55,19 +59,10 @@ public class SecurityConfig {
                                 "/diaSemana/**"
                         ).hasAuthority("FUNCIONARIO_ADM")
 
-                        .requestMatchers("/garcom/**").hasAuthority("FUNCIONARIO_GARCOM") //TODO ajustar os endpoitns que o garcom pode acessar
-                        // Acessos do cliente ->
-                        .requestMatchers(HttpMethod.GET,
-                                "/clientes/**",
-                                "/ingredientes/**",
-                                "/restricoes/**",
-                                "/produtos/**",
-                                "/funcionarios/**",
-                                "/diaSemana/**",
-                                "/categorias/**"
-                        ).hasAnyAuthority("CLIENTE", "FUNCIONARIO_ADM")
+                        // Qualquer outra requisição precisa estar autenticada
                         .anyRequest().authenticated()
                 );
+
 
         // Adiciona o filtro JWT
         http.addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class);
