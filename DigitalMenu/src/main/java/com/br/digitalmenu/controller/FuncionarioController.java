@@ -19,7 +19,7 @@ public class FuncionarioController {
 
     @PostMapping
     public ResponseEntity<FuncionarioResponseDTO> criar(@RequestBody FuncionarioRequestDTO dto) {
-        FuncionarioResponseDTO responseDTO = funcionarioService.salvar(dto);
+        FuncionarioResponseDTO responseDTO = funcionarioService.criarFuncionario(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
