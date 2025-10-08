@@ -2,15 +2,16 @@ package com.br.digitalmenu.service;
 
 import com.br.digitalmenu.dto.request.ProdutoRequestDTO;
 import com.br.digitalmenu.dto.response.ProdutoResponseDTO;
-import com.br.digitalmenu.model.DiaSemana;
-import com.br.digitalmenu.model.Ingrediente;
-import com.br.digitalmenu.model.Produto;
-import com.br.digitalmenu.model.Restricao;
+import com.br.digitalmenu.model.*;
 import com.br.digitalmenu.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -38,9 +39,31 @@ public class ProdutoService {
     @Autowired
     private CloudinaryService cloudinaryService;
 
+    @Autowired
+    private ClienteRepository clienteRepository;
+
 
     public List<ProdutoResponseDTO> findAll() {
-        return produtoRepository.findAll().stream().map(this::toDTO).collect(Collectors.toList());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Collection<? extends GrantedAuthority> roles = authentication.getAuthorities();
+        boolean isCliente = roles.stream()
+                .anyMatch(r -> r.getAuthority().equals("CLIENTE"));
+
+        if(!isCliente) return produtoRepository.findAll().stream().map(this::toDTO).collect(Collectors.toList());
+
+        Cliente cliente = clienteRepository.findByEmail(authentication.getName()).get();
+
+        return produtoRepository.findAll().stream()
+                .filter(produto ->
+                        produto.getRestricao().stream()
+                                .noneMatch(restricao -> cliente.getRestricoes().contains(restricao))
+                                &&
+                                produto.getIngrediente().stream()
+                                        .flatMap(ingrediente -> ingrediente.getRestricoes().stream())
+                                        .noneMatch(restricao -> cliente.getRestricoes().contains(restricao))
+                )
+                .map(this::toDTO)
+                .collect(Collectors.toList());
     }
 
     public ProdutoResponseDTO findById(Long id) {
@@ -131,12 +154,10 @@ public class ProdutoService {
                         .collect(Collectors.toList()))
                 .restricoes(
                         Stream.concat(
-                                        // restrições diretas do produto
                                         Optional.ofNullable(produto.getRestricao())
                                                 .orElse(Collections.emptyList())
                                                 .stream()
                                                 .map(Restricao::getNomeRestricao),
-                                        // restrições vindas dos ingredientes
                                         Optional.ofNullable(produto.getIngrediente())
                                                 .orElse(Collections.emptyList())
                                                 .stream()
@@ -145,7 +166,7 @@ public class ProdutoService {
                                                         .stream()
                                                         .map(Restricao::getNomeRestricao))
                                 )
-                                .distinct() // remove duplicados
+                                .distinct()
                                 .collect(Collectors.toList())
                 )
                 .diasSemana(produto.getDiasSemana().stream()

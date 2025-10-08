@@ -8,6 +8,7 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity(name = "cliente")
@@ -38,6 +39,9 @@ public class Cliente {
 
     @Column(nullable = false)
     private boolean emailValidado = false;
+
+    @ManyToMany
+    private List<Restricao> restricoes;
 
     @Enumerated(EnumType.STRING)
     private RoleNome role = RoleNome.CLIENTE;
