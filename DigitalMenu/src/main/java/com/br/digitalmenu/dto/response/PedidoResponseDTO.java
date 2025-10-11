@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data @AllArgsConstructor @NoArgsConstructor
 public class PedidoResponseDTO {
@@ -26,4 +27,6 @@ public class PedidoResponseDTO {
     private ClienteResponseDTO cliente;
 
     private MesaResponseDTO mesa;
+
+    private List<ProdutoPedidoResponseDTO> produtosPedidoResponseDTO;
 }

@@ -4,6 +4,7 @@ import com.br.digitalmenu.dto.request.PedidoRequestDTO;
 import com.br.digitalmenu.dto.response.ClienteResponseDTO;
 import com.br.digitalmenu.dto.response.MesaResponseDTO;
 import com.br.digitalmenu.dto.response.PedidoResponseDTO;
+import com.br.digitalmenu.dto.response.ProdutoPedidoResponseDTO;
 import com.br.digitalmenu.model.Pedido;
 import com.br.digitalmenu.model.StatusPedido;
 import com.br.digitalmenu.repository.ClienteRepository;
@@ -35,21 +36,21 @@ public class PedidoService {
         return pedidoRepository.findAll()
                 .stream()
                 .map(pedido -> new PedidoResponseDTO(pedido.getId(), pedido.getAbertoEm(), pedido.getFinalizadoEm(),
-                        pedido.getStatusPedido(), pedido.getTotal(),new ClienteResponseDTO(pedido.getCliente()) ,new MesaResponseDTO(pedido.getMesa()))).toList();
+                        pedido.getStatusPedido(), pedido.getTotal(),new ClienteResponseDTO(pedido.getCliente()) ,new MesaResponseDTO(pedido.getMesa()),pedido.getProdutoPedidos().stream().map(ProdutoPedidoResponseDTO::new).toList())).toList();
     }
 
     public List<PedidoResponseDTO> findAllAberto(){
         return pedidoRepository.findByStatusPedido(StatusPedido.ABERTO)
                 .stream()
                 .map(pedido -> new PedidoResponseDTO(pedido.getId(), pedido.getAbertoEm(), pedido.getFinalizadoEm(),
-                        pedido.getStatusPedido(), pedido.getTotal(),new ClienteResponseDTO(pedido.getCliente()) ,new MesaResponseDTO(pedido.getMesa()))).toList();
+                        pedido.getStatusPedido(), pedido.getTotal(),new ClienteResponseDTO(pedido.getCliente()) ,new MesaResponseDTO(pedido.getMesa()),pedido.getProdutoPedidos().stream().map(ProdutoPedidoResponseDTO::new).toList())).toList();
     }
 
     public List<PedidoResponseDTO> findAllFinalizado(){
         return pedidoRepository.findByStatusPedido(StatusPedido.FINALIZADO)
                 .stream()
                 .map(pedido -> new PedidoResponseDTO(pedido.getId(), pedido.getAbertoEm(), pedido.getFinalizadoEm(),
-                        pedido.getStatusPedido(), pedido.getTotal(),new ClienteResponseDTO(pedido.getCliente()) ,new MesaResponseDTO(pedido.getMesa()))).toList();
+                        pedido.getStatusPedido(), pedido.getTotal(),new ClienteResponseDTO(pedido.getCliente()) ,new MesaResponseDTO(pedido.getMesa()),pedido.getProdutoPedidos().stream().map(ProdutoPedidoResponseDTO::new).toList())).toList();
     }
 
     public PedidoResponseDTO findById(Long id){
@@ -57,7 +58,7 @@ public class PedidoService {
                 .orElseThrow(() -> new RuntimeException("Pedido nao encontrado"));
 
         return new PedidoResponseDTO(pedido.getId(), pedido.getAbertoEm(), pedido.getFinalizadoEm(),
-                pedido.getStatusPedido(), pedido.getTotal(),new ClienteResponseDTO(pedido.getCliente()) ,new MesaResponseDTO(pedido.getMesa()));
+                pedido.getStatusPedido(), pedido.getTotal(),new ClienteResponseDTO(pedido.getCliente()) ,new MesaResponseDTO(pedido.getMesa()),pedido.getProdutoPedidos().stream().map(ProdutoPedidoResponseDTO::new).toList());
     }
 
     public PedidoResponseDTO save (@Valid PedidoRequestDTO dto){
@@ -70,7 +71,7 @@ public class PedidoService {
 
         Pedido salvar = pedidoRepository.save(pedido);
         return new PedidoResponseDTO(salvar.getId(),salvar.getAbertoEm(),salvar.getFinalizadoEm(),
-                salvar.getStatusPedido(), salvar.getTotal(),new ClienteResponseDTO(salvar.getCliente()),new MesaResponseDTO(salvar.getMesa()));
+                salvar.getStatusPedido(), salvar.getTotal(),new ClienteResponseDTO(salvar.getCliente()),new MesaResponseDTO(salvar.getMesa()),pedido.getProdutoPedidos().stream().map(ProdutoPedidoResponseDTO::new).toList());
     }
 
     public void delete(Long id) {
@@ -110,7 +111,8 @@ public class PedidoService {
                 atualizado.getStatusPedido(),
                 atualizado.getTotal(),
                 new ClienteResponseDTO(atualizado.getCliente()),
-                new MesaResponseDTO(atualizado.getMesa())
+                new MesaResponseDTO(atualizado.getMesa()),
+                pedido.getProdutoPedidos().stream().map(ProdutoPedidoResponseDTO::new).toList()
         );
     }
 }
