@@ -10,7 +10,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.Period;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -49,11 +51,25 @@ public class ProdutoService {
         boolean isCliente = roles.stream()
                 .anyMatch(r -> r.getAuthority().equals("CLIENTE"));
 
-        if(!isCliente) return produtoRepository.findAll().stream().map(this::toDTO).collect(Collectors.toList());
+        boolean isAdmin = roles.stream()
+                .anyMatch(r -> r.getAuthority().equals("FUNCIONARIO_ADM"));
+
+        if(isAdmin) return produtoRepository.findAll().stream().map(this::toDTO).collect(Collectors.toList());
 
         Cliente cliente = clienteRepository.findByEmail(authentication.getName()).get();
 
-        return produtoRepository.findAll().stream()
+        List<Produto> produtos = produtoRepository.findAll().stream()
+                .filter(produto -> produto.getDiasSemana().stream()
+                        .map(DiaSemana::getIdDia)
+                        .anyMatch(idDia -> idDia.equals(Long.parseLong(String.valueOf(LocalDate.now().getDayOfWeek().getValue())))))
+                .filter(produto -> {
+                    return estaEntre(produto.getHorarioInicial(),produto.getHorarioFinal());
+                })
+                .toList();
+
+        if(!isCliente) return produtos.stream().map(this::toDTO).toList();
+
+        return produtos.stream()
                 .filter(produto ->
                         produto.getRestricao().stream()
                                 .noneMatch(restricao -> cliente.getRestricoes().contains(restricao))
@@ -173,5 +189,16 @@ public class ProdutoService {
                         .map(DiaSemana::getNomeDia)
                         .collect(Collectors.toList()))
                 .build();
+    }
+
+    private boolean estaEntre(LocalTime inicio, LocalTime fim) {
+        LocalTime horario = LocalTime.now();
+        if (inicio.isAfter(fim)) {
+            LocalTime temp = inicio;
+            inicio = fim;
+            fim = temp;
+        }
+
+        return !horario.isBefore(inicio) && !horario.isAfter(fim);
     }
 }
