@@ -1,11 +1,15 @@
 package com.br.digitalmenu.service;
 
+import com.br.digitalmenu.dto.request.RestricoesClienteRequestDTO;
 import com.br.digitalmenu.dto.request.ClienteRequestDTO;
 import com.br.digitalmenu.dto.response.ClienteResponseDTO;
 import com.br.digitalmenu.model.Cliente;
+import com.br.digitalmenu.model.Restricao;
 import com.br.digitalmenu.repository.ClienteRepository;
+import com.br.digitalmenu.repository.RestricaoRepository;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +27,9 @@ public class ClienteService {
 
     @Autowired
     private VerificacaoService verificacaoService;
+
+    @Autowired
+    private RestricaoRepository restricaoRepository;
 
     @Autowired
     private EmailService emailService;
@@ -70,6 +77,30 @@ public class ClienteService {
 
         Cliente atualizado = clienteRepository.save(cliente);
         return toResponseDTO(atualizado);
+    }
+
+    public ResponseEntity<?> insertRestricoesCliente(RestricoesClienteRequestDTO dto){
+        Cliente cliente = clienteRepository.getReferenceById(dto.idCliente());
+
+        cliente.setRestricoes(restricaoRepository.findAllById(dto.idRestricoes()));
+
+        clienteRepository.save(cliente);
+
+        return ResponseEntity.ok("Restriçoes adicionadas com sucesso");
+    }
+
+    public ResponseEntity<?> deleteRestricoesCliente(RestricoesClienteRequestDTO dto){
+        Cliente cliente = clienteRepository.getReferenceById(dto.idCliente());
+
+        List<Restricao> restricoes = restricaoRepository.findAllById(dto.idRestricoes());
+
+        restricoes.forEach(restricao -> {
+            cliente.getRestricoes().remove(restricao);
+        });
+
+        clienteRepository.save(cliente);
+
+        return ResponseEntity.ok("Restricoes deletadas com sucesso");
     }
 
     public void deletar(Long id) {

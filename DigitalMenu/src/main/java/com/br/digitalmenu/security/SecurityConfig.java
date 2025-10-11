@@ -45,6 +45,10 @@ public class SecurityConfig {
                                 "/diaSemana/**"
                         ).authenticated()
 
+                        .requestMatchers(HttpMethod.PUT,"/pedidos/**","/clientes/**" ).hasAuthority("CLIENTE")
+
+                        .requestMatchers(HttpMethod.POST,"/pedidos/**","/clientes/**","/produtoPedido/**" ).hasAuthority("CLIENTE")
+
                         //Acesso do garçom
                         .requestMatchers("/garcom/**").hasAuthority("FUNCIONARIO_GARCOM")
                             //@TODO verificar quais rotas o garcom podera acessar
