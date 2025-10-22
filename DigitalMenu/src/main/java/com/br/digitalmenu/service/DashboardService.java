@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -22,17 +23,42 @@ public class DashboardService {
         List<Pedido> pedidos = pedidoRepository.findByFinalizadoEmData(LocalDate.now());
         List<Pedido> pedidosOntem = pedidoRepository.findByFinalizadoEmData(LocalDate.now().minusDays(1));
 
-        Optional<BigDecimal> totalDoDia = pedidos.stream().map(Pedido::getTotal).reduce(BigDecimal::add);
-        Optional<BigDecimal> totalDoDiaAnterior = pedidosOntem.stream().map(Pedido::getTotal).reduce(BigDecimal::add);
+        BigDecimal totalDoDia = pedidos.stream()
+                .map(Pedido::getTotal)
+                .reduce(BigDecimal::add)
+                .orElse(BigDecimal.ZERO);
 
-        BigDecimal porcentagem = ((totalDoDia.get().subtract(totalDoDiaAnterior.get()))
-                .divide(totalDoDiaAnterior.get(), MathContext.DECIMAL128))
+        BigDecimal totalDoDiaAnterior = pedidosOntem.stream()
+                .map(Pedido::getTotal)
+                .reduce(BigDecimal::add)
+                .orElse(BigDecimal.ZERO);
+
+        if (totalDoDiaAnterior.compareTo(BigDecimal.ZERO) == 0) {
+            return ResponseEntity.ok(Map.of(
+                    "vendasHoje", totalDoDia,
+                    "porcentagem", "+∞"
+            ));
+        }
+
+        if (totalDoDia.compareTo(BigDecimal.ZERO) == 0) {
+            return ResponseEntity.ok(Map.of(
+                    "vendasHoje", 0,
+                    "porcentagem", "-∞"
+            ));
+        }
+
+        BigDecimal porcentagem = totalDoDia.subtract(totalDoDiaAnterior)
+                .divide(totalDoDiaAnterior, MathContext.DECIMAL128)
                 .multiply(BigDecimal.valueOf(100));
 
         System.out.println(porcentagem);
         System.out.println(totalDoDia);
         System.out.println(totalDoDiaAnterior);
 
-        return ResponseEntity.ok("teste");
+        return ResponseEntity.ok(Map.of(
+                "vendasHoje", totalDoDia,
+                "porcentagem", porcentagem
+        ));
     }
+
 }
