@@ -1,6 +1,7 @@
 package com.br.digitalmenu.controller;
 
 import com.br.digitalmenu.dto.request.ClienteRequestDTO;
+import com.br.digitalmenu.dto.request.ClienteUpdateDTO;
 import com.br.digitalmenu.dto.response.ClienteResponseDTO;
 import com.br.digitalmenu.service.ClienteService;
 
@@ -40,7 +41,7 @@ public class ClienteController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ClienteResponseDTO> atualizar(@PathVariable Long id, @Valid @RequestBody ClienteRequestDTO dto) {
+    public ResponseEntity<ClienteResponseDTO> atualizar(@PathVariable Long id, @Valid @RequestBody ClienteUpdateDTO dto) {
         return ResponseEntity.ok(clienteService.atualizar(id, dto));
     }
 

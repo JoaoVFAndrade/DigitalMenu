@@ -74,7 +74,7 @@ public class VerificacaoService {
         clienteRepository.save(cliente);
 
         String token = JwtUtil.generateToken(cliente.getEmail(), List.of("CLIENTE"));
-        return new LoginResponseDTO(token, cliente.getNome());
+        return new LoginResponseDTO(token, cliente.getNome(), cliente.getIdCliente());
     }
 
     public void removerCodigo(String email) {

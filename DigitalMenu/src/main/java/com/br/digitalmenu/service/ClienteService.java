@@ -1,5 +1,6 @@
 package com.br.digitalmenu.service;
 
+import com.br.digitalmenu.dto.request.ClienteUpdateDTO;
 import com.br.digitalmenu.dto.request.RestricoesClienteRequestDTO;
 import com.br.digitalmenu.dto.request.ClienteRequestDTO;
 import com.br.digitalmenu.dto.response.ClienteResponseDTO;
@@ -66,15 +67,16 @@ public class ClienteService {
         return toResponseDTO(cliente);
     }
 
-    public ClienteResponseDTO atualizar(Long id, ClienteRequestDTO dto) {
+    public ClienteResponseDTO atualizar(Long id, ClienteUpdateDTO dto) {
         Cliente cliente = clienteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
 
-        cliente.setNome(dto.getNome());
-        cliente.setEmail(dto.getEmail());
-        cliente.setSenha(dto.getSenha());
-        cliente.setDataNascimento(dto.getDataNascimento());
-
+        if (dto.getNome() != null) cliente.setNome(dto.getNome());
+        if (dto.getEmail() != null) cliente.setEmail(dto.getEmail());
+        if (dto.getDataNascimento() != null) cliente.setDataNascimento(dto.getDataNascimento());
+        if (dto.getSenha() != null && !dto.getSenha().isBlank()) {
+            cliente.setSenha(passwordEncoder.encode(dto.getSenha()));
+        }
         Cliente atualizado = clienteRepository.save(cliente);
         return toResponseDTO(atualizado);
     }

@@ -29,7 +29,7 @@ public class AuthController {
         String token = authService.loginFuncionario(loginRequest.getEmail(), loginRequest.getSenha());
         Funcionario funcionario = funcionarioRepository.findByEmail(loginRequest.getEmail()).
                 orElseThrow(() -> new RuntimeException("Funcionario não encontrado"));
-        LoginResponseDTO response = new LoginResponseDTO(token, funcionario.getNome());
+        LoginResponseDTO response = new LoginResponseDTO(token, funcionario.getNome(), funcionario.getIdFuncionario());
         return ResponseEntity.ok(response);
     }
 
@@ -40,7 +40,7 @@ public class AuthController {
         Cliente cliente = clienteRepository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-        LoginResponseDTO response = new LoginResponseDTO(token, cliente.getNome());
+        LoginResponseDTO response = new LoginResponseDTO(token, cliente.getNome(), cliente.getIdCliente());
 
         return ResponseEntity.ok(response);
     }
