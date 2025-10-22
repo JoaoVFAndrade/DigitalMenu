@@ -51,14 +51,26 @@ public class DashboardService {
                 .divide(totalDoDiaAnterior, MathContext.DECIMAL128)
                 .multiply(BigDecimal.valueOf(100));
 
-        System.out.println(porcentagem);
-        System.out.println(totalDoDia);
-        System.out.println(totalDoDiaAnterior);
-
         return ResponseEntity.ok(Map.of(
                 "vendasHoje", totalDoDia,
                 "porcentagem", porcentagem
         ));
     }
+
+    public ResponseEntity<?> getQuantidadePedidos(){
+        List<Pedido> pedidosHoje = pedidoRepository.findByFinalizadoEmData(LocalDate.now());
+        List<Pedido> pedidosOntem = pedidoRepository.findByFinalizadoEmData(LocalDate.now().minusDays(1));
+
+        if(pedidosOntem.isEmpty()){
+            return ResponseEntity.ok(Map.of("totalPedidos",pedidosHoje.size() ,"porcentagem", "+∞"));
+        }
+
+        double porcentagem = (double) ((pedidosHoje.size() - pedidosOntem.size()) / pedidosOntem.size()) * 100;
+
+        return ResponseEntity.ok(Map.of("totalPedidos",pedidosHoje.size() ,"porcentagem",porcentagem));
+    }
+
+
+
 
 }

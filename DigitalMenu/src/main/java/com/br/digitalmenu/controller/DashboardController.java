@@ -18,4 +18,9 @@ public class DashboardController {
     public ResponseEntity<?> getVendasDoDia(){
         return dashboardService.getVendasDia();
     }
+
+    @GetMapping("/qtdeProdutosDoDia")
+    public ResponseEntity<?> getQuantidadeDeDias(){
+        return dashboardService.getQuantidadePedidos();
+    }
 }
