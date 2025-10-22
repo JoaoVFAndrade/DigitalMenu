@@ -2,6 +2,9 @@ package com.br.digitalmenu.controller;
 
 import com.br.digitalmenu.dto.request.PedidoRequestDTO;
 import com.br.digitalmenu.dto.response.PedidoResponseDTO;
+import com.br.digitalmenu.model.Pedido;
+import com.br.digitalmenu.model.StatusPedido;
+import com.br.digitalmenu.repository.PedidoRepository;
 import com.br.digitalmenu.service.PagamentoService;
 import com.br.digitalmenu.service.PedidoService;
 import jakarta.validation.Valid;
@@ -21,6 +24,9 @@ public class PedidoController {
 
     @Autowired
     private PagamentoService pagamentoService;
+
+    @Autowired
+    private PedidoRepository pedidoRepository;
 
     @GetMapping("/all")
     public List<PedidoResponseDTO> getAllPedidos(){return pedidoService.findAll();}
@@ -44,6 +50,13 @@ public class PedidoController {
     public ResponseEntity<PedidoResponseDTO> create(@RequestBody @Valid PedidoRequestDTO requestDTO){
         PedidoResponseDTO responseDTO = pedidoService.save(requestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
+    }
+
+    @GetMapping("/cliente")
+    public ResponseEntity<?> getPedidosAbertosPorCliente(@RequestParam Long idCliente){
+        List<Pedido> pedidos = pedidoRepository.findByCliente_IdCliente(idCliente);
+
+        return ResponseEntity.ok(pedidos.stream().filter(pedido -> pedido.getStatusPedido().equals(StatusPedido.ABERTO)));
     }
 
     @DeleteMapping("/{id}")
