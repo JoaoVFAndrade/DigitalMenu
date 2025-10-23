@@ -1,5 +1,6 @@
 package com.br.digitalmenu.service;
 
+import com.br.digitalmenu.dto.RestricaoDTO;
 import com.br.digitalmenu.dto.request.ClienteUpdateDTO;
 import com.br.digitalmenu.dto.request.RestricoesClienteRequestDTO;
 import com.br.digitalmenu.dto.request.ClienteRequestDTO;
@@ -115,6 +116,7 @@ public class ClienteService {
         dto.setNome(cliente.getNome());
         dto.setEmail(cliente.getEmail());
         dto.setDataNascimento(cliente.getDataNascimento());
+        dto.setRestricoes(cliente.getRestricoes().stream().map(restricao -> new RestricaoDTO(restricao.getIdRestricao(), restricao.getNomeRestricao(), restricao.getTipoRestricao())).toList());
         return dto;
     }
 
