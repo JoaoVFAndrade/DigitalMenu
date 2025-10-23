@@ -1,7 +1,9 @@
 package com.br.digitalmenu.service;
 
 import com.br.digitalmenu.model.Pedido;
+import com.br.digitalmenu.model.ProdutoPedido;
 import com.br.digitalmenu.repository.PedidoRepository;
+import com.br.digitalmenu.repository.ProdutoPedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,9 @@ public class DashboardService {
 
     @Autowired
     private PedidoRepository pedidoRepository;
+
+    @Autowired
+    private ProdutoPedidoRepository produtoPedidoRepository;
 
     public ResponseEntity<?> getVendasDia() {
         List<Pedido> pedidos = pedidoRepository.findByFinalizadoEmData(LocalDate.now());
@@ -70,7 +75,20 @@ public class DashboardService {
         return ResponseEntity.ok(Map.of("totalPedidos",pedidosHoje.size() ,"porcentagem",porcentagem));
     }
 
+    public ResponseEntity<?> getQuantidadeProdutos(){
+        List<ProdutoPedido> produtoPedidos = produtoPedidoRepository.findByData(LocalDate.now());
+        List<ProdutoPedido> produtoPedidosOntem = produtoPedidoRepository.findByData(LocalDate.now().minusDays(1));
 
+        Optional<Integer> totalProdutosHoje = produtoPedidos.stream().map(ProdutoPedido::getQuantidade).reduce(Integer::sum);
+        Optional<Integer> totalProdutosOntem = produtoPedidosOntem.stream().map(ProdutoPedido::getQuantidade).reduce(Integer::sum);
 
+        if(totalProdutosOntem.isEmpty()){
+            return ResponseEntity.ok(Map.of("totalPedidos",totalProdutosHoje.get() ,"porcentagem", "+∞"));
+        }
+
+        double porcentagem = (double) ((totalProdutosHoje.get() - totalProdutosOntem.get()) / totalProdutosOntem.get()) * 100;
+
+        return ResponseEntity.ok(Map.of("totalPedidos",totalProdutosHoje.get() ,"porcentagem",porcentagem));
+    }
 
 }
