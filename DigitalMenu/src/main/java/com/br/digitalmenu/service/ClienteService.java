@@ -10,13 +10,16 @@ import com.br.digitalmenu.model.Restricao;
 import com.br.digitalmenu.repository.ClienteRepository;
 import com.br.digitalmenu.repository.RestricaoRepository;
 import jakarta.mail.MessagingException;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -103,7 +106,15 @@ public class ClienteService {
     }
 
     public void deletar(Long id) {
-        clienteRepository.deleteById(id);
+        Cliente cliente = clienteRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+
+        cliente.setNome("ANON_" + UUID.randomUUID().toString().substring(0, 8));
+        cliente.setEmail("anon_" + cliente.getIdCliente() + "_" + UUID.randomUUID().toString().substring(0, 5) + "@example.com");
+        cliente.setSenha(passwordEncoder.encode(UUID.randomUUID().toString().substring(0, 12)));
+        cliente.setDataNascimento(LocalDate.of(2000, 1, 1));
+
+        clienteRepository.save(cliente); // @TODO adicionar um campo na tabela cliente para dizer que foi excluido;
     }
 
     private ClienteResponseDTO toResponseDTO(Cliente cliente) {
