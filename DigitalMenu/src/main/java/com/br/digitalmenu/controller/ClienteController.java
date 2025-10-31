@@ -45,14 +45,9 @@ public class ClienteController {
         return ResponseEntity.ok(clienteService.atualizar(id, dto));
     }
 
-    @PutMapping("/insertRestricoes")
-    public ResponseEntity<?> inserirRestricoesCliente(@RequestBody @Valid RestricoesClienteRequestDTO dto){
-        return clienteService.insertRestricoesCliente(dto);
-    }
-
-    @PutMapping("/deleteRestricoesCliente")
-    public ResponseEntity<?> deleteRestricoesCliente(@RequestBody @Valid RestricoesClienteRequestDTO dto){
-        return clienteService.deleteRestricoesCliente(dto);
+    @PutMapping("/atualizarRestricoesCliente")
+    public ResponseEntity<?> atualizarRestricoesCliente(@RequestBody @Valid RestricoesClienteRequestDTO dto) {
+        return clienteService.atualizarRestricoesCliente(dto);
     }
 
     @DeleteMapping("/{id}")

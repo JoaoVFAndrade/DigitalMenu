@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -49,7 +50,7 @@ public class ClienteService {
         try {
             String codigo = verificacaoService.gerarCodigo(cliente.getEmail());
             emailService.enviarCodigoVerificacao(cliente.getEmail(), codigo);
-        }catch (MessagingException e){
+        } catch (MessagingException e) {
             throw new RuntimeException("Erro ao enviar e-mail", e);
         }
 
@@ -62,6 +63,7 @@ public class ClienteService {
                 .map(this::toResponseDTO)
                 .collect(Collectors.toList());
     }
+
     public ClienteResponseDTO buscarPorId(Long id) {
         Cliente cliente = clienteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
@@ -82,28 +84,22 @@ public class ClienteService {
         return toResponseDTO(atualizado);
     }
 
-    public ResponseEntity<?> insertRestricoesCliente(RestricoesClienteRequestDTO dto){
-        Cliente cliente = clienteRepository.getReferenceById(dto.idCliente());
+    public ResponseEntity<?> atualizarRestricoesCliente(RestricoesClienteRequestDTO dto) {
+        Cliente cliente = clienteRepository.findById(dto.getIdCliente())
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
 
-        cliente.setRestricoes(restricaoRepository.findAllById(dto.idRestricoes()));
+        if (dto.getRestricoesParaAdicionar() != null && !dto.getRestricoesParaAdicionar().isEmpty()) {
+            List<Restricao> novas = restricaoRepository.findAllById(dto.getRestricoesParaAdicionar());
+            cliente.getRestricoes().addAll(novas);
+        }
 
-        clienteRepository.save(cliente);
-
-        return ResponseEntity.ok("Restriçoes adicionadas com sucesso");
-    }
-
-    public ResponseEntity<?> deleteRestricoesCliente(RestricoesClienteRequestDTO dto){
-        Cliente cliente = clienteRepository.getReferenceById(dto.idCliente());
-
-        List<Restricao> restricoes = restricaoRepository.findAllById(dto.idRestricoes());
-
-        restricoes.forEach(restricao -> {
-            cliente.getRestricoes().remove(restricao);
-        });
+        if (dto.getRestricoesParaRemover() != null && !dto.getRestricoesParaRemover().isEmpty()) {
+            List<Restricao> remover = restricaoRepository.findAllById(dto.getRestricoesParaRemover());
+            cliente.getRestricoes().removeAll(remover);
+        }
 
         clienteRepository.save(cliente);
-
-        return ResponseEntity.ok("Restricoes deletadas com sucesso");
+        return ResponseEntity.ok("Restrições atualizadas com sucesso");
     }
 
     public void deletar(Long id) {
