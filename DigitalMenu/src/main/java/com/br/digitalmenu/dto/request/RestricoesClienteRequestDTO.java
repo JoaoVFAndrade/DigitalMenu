@@ -4,11 +4,12 @@ import java.util.List;
 
 import com.br.digitalmenu.model.Cliente;
 import com.br.digitalmenu.validacoes.EntityExists;
+import lombok.Data;
 
-public record RestricoesClienteRequestDTO(
-    @EntityExists(entityClass=Cliente.class)
-    Long idCliente,
-    List<Long> idRestricoes
-) {
+@Data
+public class RestricoesClienteRequestDTO {
+    private Long idCliente;
+    private List<Long> restricoesParaAdicionar;
+    private List<Long> restricoesParaRemover;
 
 }

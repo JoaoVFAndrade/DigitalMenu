@@ -10,12 +10,16 @@ import com.br.digitalmenu.model.Restricao;
 import com.br.digitalmenu.repository.ClienteRepository;
 import com.br.digitalmenu.repository.RestricaoRepository;
 import jakarta.mail.MessagingException;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -49,7 +53,7 @@ public class ClienteService {
         try {
             String codigo = verificacaoService.gerarCodigo(cliente.getEmail());
             emailService.enviarCodigoVerificacao(cliente.getEmail(), codigo);
-        }catch (MessagingException e){
+        } catch (MessagingException e) {
             throw new RuntimeException("Erro ao enviar e-mail", e);
         }
 
@@ -62,6 +66,7 @@ public class ClienteService {
                 .map(this::toResponseDTO)
                 .collect(Collectors.toList());
     }
+
     public ClienteResponseDTO buscarPorId(Long id) {
         Cliente cliente = clienteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
@@ -82,32 +87,34 @@ public class ClienteService {
         return toResponseDTO(atualizado);
     }
 
-    public ResponseEntity<?> insertRestricoesCliente(RestricoesClienteRequestDTO dto){
-        Cliente cliente = clienteRepository.getReferenceById(dto.idCliente());
+    public ResponseEntity<?> atualizarRestricoesCliente(RestricoesClienteRequestDTO dto) {
+        Cliente cliente = clienteRepository.findById(dto.getIdCliente())
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
 
-        cliente.setRestricoes(restricaoRepository.findAllById(dto.idRestricoes()));
+        if (dto.getRestricoesParaAdicionar() != null && !dto.getRestricoesParaAdicionar().isEmpty()) {
+            List<Restricao> novas = restricaoRepository.findAllById(dto.getRestricoesParaAdicionar());
+            cliente.getRestricoes().addAll(novas);
+        }
 
-        clienteRepository.save(cliente);
-
-        return ResponseEntity.ok("Restriçoes adicionadas com sucesso");
-    }
-
-    public ResponseEntity<?> deleteRestricoesCliente(RestricoesClienteRequestDTO dto){
-        Cliente cliente = clienteRepository.getReferenceById(dto.idCliente());
-
-        List<Restricao> restricoes = restricaoRepository.findAllById(dto.idRestricoes());
-
-        restricoes.forEach(restricao -> {
-            cliente.getRestricoes().remove(restricao);
-        });
+        if (dto.getRestricoesParaRemover() != null && !dto.getRestricoesParaRemover().isEmpty()) {
+            List<Restricao> remover = restricaoRepository.findAllById(dto.getRestricoesParaRemover());
+            cliente.getRestricoes().removeAll(remover);
+        }
 
         clienteRepository.save(cliente);
-
-        return ResponseEntity.ok("Restricoes deletadas com sucesso");
+        return ResponseEntity.ok("Restrições atualizadas com sucesso");
     }
 
     public void deletar(Long id) {
-        clienteRepository.deleteById(id);
+        Cliente cliente = clienteRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+
+        cliente.setNome("ANON_" + UUID.randomUUID().toString().substring(0, 8));
+        cliente.setEmail("anon_" + cliente.getIdCliente() + "_" + UUID.randomUUID().toString().substring(0, 5) + "@example.com");
+        cliente.setSenha(passwordEncoder.encode(UUID.randomUUID().toString().substring(0, 12)));
+        cliente.setDataNascimento(LocalDate.of(2000, 1, 1));
+
+        clienteRepository.save(cliente); // @TODO adicionar um campo na tabela cliente para dizer que foi excluido;
     }
 
     private ClienteResponseDTO toResponseDTO(Cliente cliente) {
