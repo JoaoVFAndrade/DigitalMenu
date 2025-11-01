@@ -48,7 +48,7 @@ public class SecurityConfig {
 
                         .requestMatchers(HttpMethod.PUT,"/pedidos/**","/clientes/**" ).hasAuthority("CLIENTE")
 
-                        .requestMatchers(HttpMethod.POST,"/pedidos/**","/clientes/**","/produtoPedido/**" ).hasAuthority("CLIENTE")
+                        .requestMatchers(HttpMethod.POST,"/pedidos/**","/clientes/**","/produtoPedido/**","/avaliacao/insert" ).hasAuthority("CLIENTE")
 
                         //Acesso do garçom
                         .requestMatchers("/pedidos/abertos").hasAuthority("FUNCIONARIO_GARCOM")
@@ -61,7 +61,8 @@ public class SecurityConfig {
                                 "/restricoes/**",
                                 "/produtos/**",
                                 "/funcionarios/**",
-                                "/diaSemana/**"
+                                "/diaSemana/**",
+                                "/avaliacao/**"
                         ).hasAuthority("FUNCIONARIO_ADM")
 
                         // Qualquer outra requisição precisa estar autenticada

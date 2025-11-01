@@ -4,11 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b01df015-5659-40a4-a53c-8faf0147e4bb" name="Changes" comment="">
+    <list default="true" id="b01df015-5659-40a4-a53c-8faf0147e4bb" name="Changes" comment="entidade avaliacao">
+      <change beforePath="$PROJECT_DIR$/.idea/DigitalMenu.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/DigitalMenu.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalMenu/src/main/java/com/br/digitalmenu/controller/ClienteController.java" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalMenu/src/main/java/com/br/digitalmenu/controller/ClienteController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalMenu/src/main/java/com/br/digitalmenu/dto/request/RestricoesClienteRequestDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalMenu/src/main/java/com/br/digitalmenu/dto/request/RestricoesClienteRequestDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalMenu/src/main/java/com/br/digitalmenu/service/ClienteService.java" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalMenu/src/main/java/com/br/digitalmenu/service/ClienteService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalMenu/src/main/java/com/br/digitalmenu/model/Avaliacao.java" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalMenu/src/main/java/com/br/digitalmenu/model/Avaliacao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalMenu/src/main/java/com/br/digitalmenu/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalMenu/src/main/java/com/br/digitalmenu/security/SecurityConfig.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,9 +20,10 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Enum" />
-        <option value="Interface" />
         <option value="Dockerfile" />
+        <option value="Interface" />
         <option value="Class" />
+        <option value="Record" />
       </list>
     </option>
   </component>
@@ -68,6 +70,12 @@
     &quot;accountId&quot;: &quot;1394a01c-4b49-4fbd-bb97-bf455b4c67b7&quot;
   }
 }</component>
+  <component name="JpbToolWindowState">
+    <option name="isToolWindowVisible" value="false" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
   </component>
@@ -91,10 +99,10 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;cliente&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/project/DigitalMenu/DigitalMenu/src/main/resources/static&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/pedro/OneDrive/Área de Trabalho/DigitalMenu&quot;,
     &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
@@ -174,6 +182,7 @@
       </list>
     </recent_temporary>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="b01df015-5659-40a4-a53c-8faf0147e4bb" name="Changes" comment="" />
@@ -182,6 +191,15 @@
       <option name="presentableId" value="Default" />
       <updated>1756759412148</updated>
     </task>
+    <task id="LOCAL-00001" summary="entidade avaliacao">
+      <option name="closed" value="true" />
+      <created>1761958197044</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1761958197044</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -194,5 +212,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="entidade avaliacao" />
+    <option name="LAST_COMMIT_MESSAGE" value="entidade avaliacao" />
   </component>
 </project>

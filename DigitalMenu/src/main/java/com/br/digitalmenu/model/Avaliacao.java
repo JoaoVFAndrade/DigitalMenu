@@ -24,7 +24,7 @@ public class Avaliacao {
     private Byte notaQualidadeDosProduto;
 
     @Column(length = 50)
-    private String produto;
+    private String comentario;
 
     @Column(nullable = false)
     private LocalDate data;
