@@ -3,6 +3,7 @@ package com.br.digitalmenu.dto.response;
 import com.br.digitalmenu.model.ProdutoPedido;
 import com.br.digitalmenu.model.StatusProdutoPedido;
 
+import java.math.BigDecimal;
 import java.time.LocalTime;
 
 public record ProdutoPedidoResponseDTO(
@@ -14,7 +15,7 @@ public record ProdutoPedidoResponseDTO(
         LocalTime horarioPedido,
         String numeroMesa,
         Integer quantidade,
-        Double subTotal
+        BigDecimal subTotal
 ) {
     public ProdutoPedidoResponseDTO(ProdutoPedido produtoPedido){
         this(produtoPedido.getId(),

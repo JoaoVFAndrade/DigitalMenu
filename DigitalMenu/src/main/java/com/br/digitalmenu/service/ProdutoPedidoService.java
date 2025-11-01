@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URI;
 
 @Service
@@ -27,54 +28,92 @@ public class ProdutoPedidoService {
     @Autowired
     private PedidoRepository pedidoRepository;
 
-    public ResponseEntity<?> insertProdutoPedido(InsertProdutoPedidoDTO dto){
+    public ResponseEntity<?> insertProdutoPedido(InsertProdutoPedidoDTO dto) {
         ProdutoPedido produtoPedido = new ProdutoPedido();
 
         produtoPedido.setProduto(produtoRepository.getReferenceById(dto.idProduto()));
         produtoPedido.setPedido(pedidoRepository.getReferenceById(dto.idPedido()));
         produtoPedido.setQuantidade(dto.quantidade());
-        produtoPedido.setSubTotal(Math.round(produtoPedido.getQuantidade() * produtoPedido.getProduto().getPreco() * 100.0) / 100.0);
+
+        // Calculando o subtotal com BigDecimal
+        BigDecimal quantidade = BigDecimal.valueOf(produtoPedido.getQuantidade());
+        BigDecimal preco = produtoPedido.getProduto().getPreco();
+        BigDecimal subTotal = preco.multiply(quantidade)
+                .setScale(2, RoundingMode.HALF_UP); // 2 casas decimais, arredondamento comum
+        produtoPedido.setSubTotal(subTotal);
 
         produtoPedidoRepository.save(produtoPedido);
 
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().build(produtoPedido);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .buildAndExpand(produtoPedido.getId()) // se tiver ID
+                .toUri();
 
         return ResponseEntity.created(location).body(produtoPedido);
     }
 
-    public ResponseEntity<?> cancelarProdutoPedido(Long idProdutoPedido){
-        if(!produtoPedidoRepository.existsById(idProdutoPedido))
+    public ResponseEntity<?> cancelarProdutoPedido(Long idProdutoPedido) {
+        // Verifica se o produto existe
+        if (!produtoPedidoRepository.existsById(idProdutoPedido)) {
             return ResponseEntity.notFound().build();
+        }
 
+        // Busca o produto pedido
         ProdutoPedido produtoPedido = produtoPedidoRepository.getReferenceById(idProdutoPedido);
 
-        if(produtoPedido.getStatus().equals(StatusProdutoPedido.CANCELADO))
+        // Verifica se já está cancelado
+        if (produtoPedido.getStatus().equals(StatusProdutoPedido.CANCELADO)) {
             return ResponseEntity.status(409).body("Produto já cancelado");
+        }
 
-        if(produtoPedido.getStatus().equals(StatusProdutoPedido.FINALIZADO))
-            produtoPedido.getPedido().setTotal(produtoPedido.getPedido().getTotal().subtract(BigDecimal.valueOf(produtoPedido.getSubTotal())));
+        // Se o produto já foi finalizado, subtrai o subtotal do total do pedido
+        if (produtoPedido.getStatus().equals(StatusProdutoPedido.FINALIZADO)) {
+            BigDecimal novoTotal = produtoPedido.getPedido()
+                    .getTotal()
+                    .subtract(produtoPedido.getSubTotal())
+                    .setScale(2, RoundingMode.HALF_UP); // garante 2 casas decimais
+            produtoPedido.getPedido().setTotal(novoTotal);
+        }
 
+        // Atualiza o status do produto para CANCELADO
         produtoPedido.setStatus(StatusProdutoPedido.CANCELADO);
 
+        // Salva as alterações
         produtoPedidoRepository.save(produtoPedido);
 
+        // Retorna a resposta com o DTO atualizado
         return ResponseEntity.ok(new ProdutoPedidoResponseDTO(produtoPedido));
     }
 
-    public ResponseEntity<?> finalizarProdutoPedido(Long idProdutoPedido){
-        if(!produtoPedidoRepository.existsById(idProdutoPedido))
+    public ResponseEntity<?> finalizarProdutoPedido(Long idProdutoPedido) {
+        // Verifica se o produto existe
+        if (!produtoPedidoRepository.existsById(idProdutoPedido)) {
             return ResponseEntity.notFound().build();
+        }
 
+        // Busca o produto pedido
         ProdutoPedido produtoPedido = produtoPedidoRepository.getReferenceById(idProdutoPedido);
 
-        if(!produtoPedido.getStatus().equals(StatusProdutoPedido.EM_PREPARACAO))
-            return ResponseEntity.status(409).body("Produto já finalizado ou cancelado");
+        // Verifica se o produto ainda está em preparação
+        if (!produtoPedido.getStatus().equals(StatusProdutoPedido.EM_PREPARACAO)) {
+            return ResponseEntity.status(409)
+                    .body("Produto já finalizado ou cancelado");
+        }
 
+        // Atualiza o status do produto para FINALIZADO
         produtoPedido.setStatus(StatusProdutoPedido.FINALIZADO);
-        produtoPedido.getPedido().setTotal(produtoPedido.getPedido().getTotal().add(BigDecimal.valueOf(produtoPedido.getSubTotal())));
 
+        // Atualiza o total do pedido somando o subtotal do produto
+        BigDecimal novoTotal = produtoPedido.getPedido()
+                .getTotal()
+                .add(produtoPedido.getSubTotal())
+                .setScale(2, RoundingMode.HALF_UP);
+
+        produtoPedido.getPedido().setTotal(novoTotal);
+
+        // Salva as alterações
         produtoPedidoRepository.save(produtoPedido);
 
+        // Retorna a resposta com o DTO do produto pedido finalizado
         return ResponseEntity.ok(new ProdutoPedidoResponseDTO(produtoPedido));
     }
 }
