@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @Service
 public class PagamentoService {
@@ -59,10 +60,15 @@ public class PagamentoService {
                     JsonObject item = new JsonObject();
                     item.addProperty("name", produtoPedido.getProduto().getNomeProduto());
                     item.addProperty("quantity", produtoPedido.getQuantidade());
-                    int unitAmount = BigDecimal.valueOf(produtoPedido.getProduto().getPreco())
-                            .multiply(new BigDecimal(100))
+
+                    // Calcula o unit_amount em centavos corretamente
+                    BigDecimal preco = produtoPedido.getProduto().getPreco()
+                            .setScale(2, RoundingMode.HALF_UP); //  2 casas decimais
+                    int unitAmount = preco.multiply(BigDecimal.valueOf(100))
+                            .setScale(0, RoundingMode.HALF_UP) // converte para inteiro em centavos
                             .intValue();
                     item.addProperty("unit_amount", unitAmount);
+
                     items.add(item);
                 });
 

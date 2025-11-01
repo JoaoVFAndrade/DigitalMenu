@@ -3,6 +3,7 @@ package com.br.digitalmenu.dto.request;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
 @Data
 public class ProdutoRequestDTO {
     private String nomeProduto;
-    private Double preco;
+    private BigDecimal preco;
     @JsonFormat(pattern = "HH:mm")
     private LocalTime horarioInicial;
     @JsonFormat(pattern = "HH:mm")

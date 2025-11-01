@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -32,8 +33,8 @@ public class ProdutoPedido {
     @Column(nullable = false)
     private LocalDate data = LocalDate.now();
 
-    @Column(nullable = false)
-    private Double subTotal;
+    @Column(precision = 10, scale = 2, nullable = false)
+    private BigDecimal subTotal;
 
     @Column(nullable = false)
     private LocalTime horario = LocalTime.now();
