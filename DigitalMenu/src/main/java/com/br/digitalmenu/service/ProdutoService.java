@@ -102,10 +102,12 @@ public class ProdutoService {
         }
 
         if (dto.getIngredientesIds() != null) {
+            produto.setIngrediente(List.of());
             produto.setIngrediente(ingredienteRepository.findAllById(dto.getIngredientesIds()));
         }
 
         if (dto.getRestricoesIds() != null) {
+            produto.setRestricao(List.of());
             produto.setRestricao(restricaoRepository.findAllById(dto.getRestricoesIds()));
         }
 
