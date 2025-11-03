@@ -109,6 +109,8 @@ public class PagamentoService {
         pedidoJson.add("payment_methods", paymentMethods);
         pedidoJson.add("payment_methods_configs", paymentMethodsConfigs);
         pedidoJson.addProperty("redirect_url", "https://sualoja.com.br/obrigado");
+//        pedidoJson.addProperty("redirect_url", "https://meusite-teste.com/pedido/" + pedido.getId() + "/avaliar");
+        //TODO nao e possivel direcionar para uma pagina local host. realizar alteracao quando subir para cloud
 
 // Enviar
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");

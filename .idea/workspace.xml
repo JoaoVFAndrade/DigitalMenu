@@ -7,16 +7,10 @@
     <list default="true" id="b01df015-5659-40a4-a53c-8faf0147e4bb" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-<<<<<<< HEAD
-=======
-      <change beforePath="$PROJECT_DIR$/DigitalMenu/src/main/java/com/br/digitalmenu/dto/request/ProdutoRequestDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalMenu/src/main/java/com/br/digitalmenu/dto/request/ProdutoRequestDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalMenu/src/main/java/com/br/digitalmenu/dto/response/ProdutoPedidoResponseDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalMenu/src/main/java/com/br/digitalmenu/dto/response/ProdutoPedidoResponseDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalMenu/src/main/java/com/br/digitalmenu/dto/response/ProdutoResponseDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalMenu/src/main/java/com/br/digitalmenu/dto/response/ProdutoResponseDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalMenu/src/main/java/com/br/digitalmenu/model/Produto.java" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalMenu/src/main/java/com/br/digitalmenu/model/Produto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalMenu/src/main/java/com/br/digitalmenu/model/ProdutoPedido.java" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalMenu/src/main/java/com/br/digitalmenu/model/ProdutoPedido.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalMenu/src/main/java/com/br/digitalmenu/service/PagamentoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalMenu/src/main/java/com/br/digitalmenu/service/PagamentoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalMenu/src/main/java/com/br/digitalmenu/service/ProdutoPedidoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalMenu/src/main/java/com/br/digitalmenu/service/ProdutoPedidoService.java" afterDir="false" />
->>>>>>> 0f134fb730c3e8c4d967c6f4ac74e636595d8122
+      <change beforePath="$PROJECT_DIR$/DigitalMenu/src/main/java/com/br/digitalmenu/controller/PedidoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalMenu/src/main/java/com/br/digitalmenu/controller/PedidoController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalMenu/src/main/java/com/br/digitalmenu/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalMenu/src/main/java/com/br/digitalmenu/security/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalMenu/src/main/java/com/br/digitalmenu/service/MesaService.java" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalMenu/src/main/java/com/br/digitalmenu/service/MesaService.java" afterDir="false" />
+
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,6 +43,10 @@
             <RecentBranchesForRepo>
               <option name="branches">
                 <list>
+                  <RecentBranch>
+                    <option name="branchName" value="pagamentos" />
+                    <option name="lastUsedInstant" value="1761959644" />
+                  </RecentBranch>
                   <RecentBranch>
                     <option name="branchName" value="main" />
                     <option name="lastUsedInstant" value="1761947567" />
@@ -93,7 +91,6 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-<<<<<<< HEAD
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Application.DigitalMenuApplication.executor": "Run",
@@ -111,25 +108,6 @@
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
     "settings.editor.selected.configurable": "preferences.pluginManager"
-=======
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.DigitalMenuApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.DigitalMenu.app: Compose Deployment.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.DigitalMenu/Dockerfile build.executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/project/DigitalMenu/DigitalMenu/src/main/resources/static&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
->>>>>>> 0f134fb730c3e8c4d967c6f4ac74e636595d8122
   }
 }]]></component>
   <component name="RecentsManager">

@@ -35,20 +35,30 @@ public class ProdutoPedidoService {
         produtoPedido.setPedido(pedidoRepository.getReferenceById(dto.idPedido()));
         produtoPedido.setQuantidade(dto.quantidade());
 
-        // Calculando o subtotal com BigDecimal
+        // Calcula o subtotal do item
         BigDecimal quantidade = BigDecimal.valueOf(produtoPedido.getQuantidade());
         BigDecimal preco = produtoPedido.getProduto().getPreco();
         BigDecimal subTotal = preco.multiply(quantidade)
-                .setScale(2, RoundingMode.HALF_UP); // 2 casas decimais, arredondamento comum
+                .setScale(2, RoundingMode.HALF_UP);
         produtoPedido.setSubTotal(subTotal);
 
+        // Salva o item
         produtoPedidoRepository.save(produtoPedido);
 
+        // Atualiza o total do pedido automaticamente
+        var pedido = produtoPedido.getPedido();
+        BigDecimal totalAtual = pedido.getTotal() != null ? pedido.getTotal() : BigDecimal.ZERO;
+        BigDecimal novoTotal = totalAtual.add(subTotal).setScale(2, RoundingMode.HALF_UP);
+        pedido.setTotal(novoTotal);
+        pedidoRepository.save(pedido);
+
+        // Cria o Location do novo recurso
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .buildAndExpand(produtoPedido.getId()) // se tiver ID
+                .buildAndExpand(produtoPedido.getId())
                 .toUri();
 
-        return ResponseEntity.created(location).body(produtoPedido);
+        // Retorna o item inserido
+        return ResponseEntity.created(location).body(new ProdutoPedidoResponseDTO(produtoPedido));
     }
 
     public ResponseEntity<?> cancelarProdutoPedido(Long idProdutoPedido) {

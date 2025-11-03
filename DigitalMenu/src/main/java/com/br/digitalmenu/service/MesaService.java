@@ -44,9 +44,10 @@ public class MesaService {
         if(!mesaRepository.existsById(idMesa))
             return ResponseEntity.notFound().build();
 
-        QRCodeWriter qrCodeWriter = new QRCodeWriter();
         try {
-            BitMatrix bitMatrix = qrCodeWriter.encode(Map.of("idMesa",idMesa).toString(), BarcodeFormat.QR_CODE,300,300);
+            String url = "http://localhost:4200/login?idMesa=" + idMesa;
+            QRCodeWriter qrCodeWriter = new QRCodeWriter();
+            BitMatrix bitMatrix = qrCodeWriter.encode(url, BarcodeFormat.QR_CODE, 300, 300);
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             MatrixToImageWriter.writeToStream(bitMatrix, "PNG", baos);
