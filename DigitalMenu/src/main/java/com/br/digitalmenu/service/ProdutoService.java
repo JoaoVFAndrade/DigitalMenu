@@ -92,31 +92,57 @@ public class ProdutoService {
         Produto produto = produtoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Produto nao encontrato"));
 
+        // Básico
+        if (dto.getNomeProduto() != null && !dto.getNomeProduto().isBlank()) {
+            produto.setNomeProduto(dto.getNomeProduto());
+        }
         if (dto.getPreco() != null) {
             produto.setPreco(dto.getPreco());
         }
-
-        if (dto.getIdCategoria() != null) {
-            produto.setCategoria(categoriaRepository.findById(dto.getIdCategoria())
-                    .orElseThrow(() -> new RuntimeException("Categoria nao encontraa")));
+        if (dto.getFoto() != null) {
+            produto.setFoto(dto.getFoto());
+        }
+        if (dto.getEstoque() != null) {
+            produto.setEstoque(dto.getEstoque());
+        }
+        if (dto.getAtivo() != null) {
+            produto.setAtivo(dto.getAtivo());
         }
 
+        // Horários — DTO já é LocalTime com @JsonFormat("HH:mm")
+        if (dto.getHorarioInicial() != null) {
+            produto.setHorarioInicial(dto.getHorarioInicial());
+        }
+        if (dto.getHorarioFinal() != null) {
+            produto.setHorarioFinal(dto.getHorarioFinal());
+        }
+
+        // Categoria
+        if (dto.getIdCategoria() != null) {
+            produto.setCategoria(
+                    categoriaRepository.findById(dto.getIdCategoria())
+                            .orElseThrow(() -> new RuntimeException("Categoria nao encontraa"))
+            );
+        }
+
+        // Ingredientes/Restrições/Dias
+        // Observação: se vier lista vazia, zera a relação; se vier null, mantém como está.
         if (dto.getIngredientesIds() != null) {
             produto.setIngrediente(List.of());
             produto.setIngrediente(ingredienteRepository.findAllById(dto.getIngredientesIds()));
         }
-
         if (dto.getRestricoesIds() != null) {
             produto.setRestricao(List.of());
             produto.setRestricao(restricaoRepository.findAllById(dto.getRestricoesIds()));
         }
-
         if (dto.getDiasSemanaIds() != null) {
             produto.setDiasSemana(diaSemanaRepository.findAllById(dto.getDiasSemanaIds()));
         }
+
         Produto atualizado = produtoRepository.save(produto);
         return toDTO(atualizado);
     }
+
 
     public void desativarProduto(Long id) {
         produtoRepository.findById(id).map(produto -> {

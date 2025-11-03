@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.cglib.core.Local;
 
+import java.math.BigDecimal;
 import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.List;
 public class ProdutoResponseDTO {
     private Long idProduto;
     private String nomeProduto;
-    private Double preco;
+    private BigDecimal preco;
     private LocalTime horarioInicial;
     private LocalTime horarioFinal;
     private String foto;

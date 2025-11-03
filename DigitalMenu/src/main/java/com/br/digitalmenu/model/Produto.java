@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
@@ -21,9 +22,9 @@ public class Produto {
     @NotBlank
     private String nomeProduto;
 
-    @Column(name = "preco")
     @NotNull
-    private Double preco;
+    @Column(precision = 10, scale = 2, nullable = false, name = "preco")
+    private BigDecimal preco;
 
     @Column(name = "horario_inicial")
     @JsonFormat(pattern = "HH:mm")

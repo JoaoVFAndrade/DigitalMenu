@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @Service
 public class PagamentoService {
@@ -59,10 +60,15 @@ public class PagamentoService {
                     JsonObject item = new JsonObject();
                     item.addProperty("name", produtoPedido.getProduto().getNomeProduto());
                     item.addProperty("quantity", produtoPedido.getQuantidade());
-                    int unitAmount = BigDecimal.valueOf(produtoPedido.getProduto().getPreco())
-                            .multiply(new BigDecimal(100))
+
+                    // Calcula o unit_amount em centavos corretamente
+                    BigDecimal preco = produtoPedido.getProduto().getPreco()
+                            .setScale(2, RoundingMode.HALF_UP); //  2 casas decimais
+                    int unitAmount = preco.multiply(BigDecimal.valueOf(100))
+                            .setScale(0, RoundingMode.HALF_UP) // converte para inteiro em centavos
                             .intValue();
                     item.addProperty("unit_amount", unitAmount);
+
                     items.add(item);
                 });
 
@@ -103,6 +109,8 @@ public class PagamentoService {
         pedidoJson.add("payment_methods", paymentMethods);
         pedidoJson.add("payment_methods_configs", paymentMethodsConfigs);
         pedidoJson.addProperty("redirect_url", "https://sualoja.com.br/obrigado");
+//        pedidoJson.addProperty("redirect_url", "https://meusite-teste.com/pedido/" + pedido.getId() + "/avaliar");
+        //TODO nao e possivel direcionar para uma pagina local host. realizar alteracao quando subir para cloud
 
 // Enviar
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");

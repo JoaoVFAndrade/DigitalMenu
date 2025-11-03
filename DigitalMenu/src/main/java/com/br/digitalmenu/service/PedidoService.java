@@ -116,4 +116,35 @@ public class PedidoService {
                 pedido.getProdutoPedidos().stream().map(ProdutoPedidoResponseDTO::new).toList()
         );
     }
-}
+
+        public void atualizarStatusPagamento(Long pedidoId, String statusPagBank) {
+            Pedido pedido = pedidoRepository.findById(pedidoId)
+                    .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
+
+            switch (statusPagBank.toUpperCase()) {
+                case "PAID":
+                case "PAID_OUT":
+                    pedido.setStatusPedido(StatusPedido.FINALIZADO);
+                    pedido.setFinalizadoEm(LocalDateTime.now());
+                    break;
+
+                case "DECLINED":
+                case "CANCELLED":
+                    pedido.setStatusPedido(StatusPedido.CANCELADO);
+                    pedido.setFinalizadoEm(LocalDateTime.now());
+                    break;
+
+                case "WAITING":
+                case "IN_ANALYSIS":
+                    pedido.setStatusPedido(StatusPedido.ABERTO);
+                    break;
+
+                default:
+                    System.out.println("Status desconhecido recebido do PagBank: " + statusPagBank);
+                    break;
+            }
+
+            pedidoRepository.save(pedido);
+        }
+    }
+
