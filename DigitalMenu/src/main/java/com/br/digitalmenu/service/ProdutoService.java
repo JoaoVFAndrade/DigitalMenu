@@ -1,6 +1,7 @@
 package com.br.digitalmenu.service;
 
 import com.br.digitalmenu.dto.request.ProdutoRequestDTO;
+import com.br.digitalmenu.dto.response.IngredienteResponseDTO;
 import com.br.digitalmenu.dto.response.ProdutoResponseDTO;
 import com.br.digitalmenu.model.*;
 import com.br.digitalmenu.repository.*;
@@ -92,7 +93,6 @@ public class ProdutoService {
         Produto produto = produtoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Produto nao encontrato"));
 
-        // Básico
         if (dto.getNomeProduto() != null && !dto.getNomeProduto().isBlank()) {
             produto.setNomeProduto(dto.getNomeProduto());
         }
@@ -109,7 +109,6 @@ public class ProdutoService {
             produto.setAtivo(dto.getAtivo());
         }
 
-        // Horários — DTO já é LocalTime com @JsonFormat("HH:mm")
         if (dto.getHorarioInicial() != null) {
             produto.setHorarioInicial(dto.getHorarioInicial());
         }
@@ -117,7 +116,6 @@ public class ProdutoService {
             produto.setHorarioFinal(dto.getHorarioFinal());
         }
 
-        // Categoria
         if (dto.getIdCategoria() != null) {
             produto.setCategoria(
                     categoriaRepository.findById(dto.getIdCategoria())
@@ -125,8 +123,6 @@ public class ProdutoService {
             );
         }
 
-        // Ingredientes/Restrições/Dias
-        // Observação: se vier lista vazia, zera a relação; se vier null, mantém como está.
         if (dto.getIngredientesIds() != null) {
             produto.setIngrediente(List.of());
             produto.setIngrediente(ingredienteRepository.findAllById(dto.getIngredientesIds()));
@@ -181,6 +177,25 @@ public class ProdutoService {
 
 
     private ProdutoResponseDTO toDTO(Produto produto) {
+        List<IngredienteResponseDTO> ingredientesDTO = Optional.ofNullable(produto.getIngrediente())
+                .orElse(Collections.emptyList())
+                .stream()
+                .map(IngredienteResponseDTO::new).toList();
+
+        List<String> restricoesProduto = Optional.ofNullable(produto.getRestricao())
+                .orElse(Collections.emptyList())
+                .stream()
+                .map(Restricao::getNomeRestricao)
+                .collect(Collectors.toList());
+
+        List<String> restricoesCombinadas = Stream.concat(
+                        restricoesProduto.stream(),
+                        ingredientesDTO.stream()
+                                .flatMap(i -> i.getRestricoes().stream())
+                )
+                .distinct()
+                .collect(Collectors.toList());
+
         return ProdutoResponseDTO.builder()
                 .idProduto(produto.getIdProduto())
                 .nomeProduto(produto.getNomeProduto())
@@ -191,29 +206,12 @@ public class ProdutoService {
                 .estoque(produto.getEstoque())
                 .ativo(produto.getAtivo())
                 .nomeCategoria(produto.getCategoria().getNomeCategoria())
-                .ingredientes(Optional.ofNullable(produto.getIngrediente())
+                .ingredientes(ingredientesDTO) // agora com restrições dentro
+                .restricoesProduto(restricoesProduto)
+                .restricoesCombinadas(restricoesCombinadas)
+                .diasSemana(Optional.ofNullable(produto.getDiasSemana())
                         .orElse(Collections.emptyList())
                         .stream()
-                        .map(Ingrediente::getNomeIngrediente)
-                        .collect(Collectors.toList()))
-                .restricoes(
-                        Stream.concat(
-                                        Optional.ofNullable(produto.getRestricao())
-                                                .orElse(Collections.emptyList())
-                                                .stream()
-                                                .map(Restricao::getNomeRestricao),
-                                        Optional.ofNullable(produto.getIngrediente())
-                                                .orElse(Collections.emptyList())
-                                                .stream()
-                                                .flatMap(i -> Optional.ofNullable(i.getRestricoes())
-                                                        .orElse(Collections.emptyList())
-                                                        .stream()
-                                                        .map(Restricao::getNomeRestricao))
-                                )
-                                .distinct()
-                                .collect(Collectors.toList())
-                )
-                .diasSemana(produto.getDiasSemana().stream()
                         .map(DiaSemana::getNomeDia)
                         .collect(Collectors.toList()))
                 .build();

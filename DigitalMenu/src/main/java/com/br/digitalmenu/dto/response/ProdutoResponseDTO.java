@@ -25,7 +25,8 @@ public class ProdutoResponseDTO {
     private Boolean estoque;
     private Boolean ativo;
     private String nomeCategoria;
-    private List<String> ingredientes;
-    private List<String> restricoes;
+    private List<IngredienteResponseDTO> ingredientes;
+    private List<String> restricoesProduto;
+    private List<String> restricoesCombinadas;
     private List<String> diasSemana;
 }
