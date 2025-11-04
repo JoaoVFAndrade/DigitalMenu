@@ -20,11 +20,11 @@ public class Pedido {
     private Long id;
 
     @Column(name = "data_inicio")
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss", timezone = "America/Sao_Paulo")
     private LocalDateTime abertoEm;
 
     @Column(name = "data_final")
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss", timezone = "America/Sao_Paulo")
     private LocalDateTime finalizadoEm;
 
     @Column(name = "status")

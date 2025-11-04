@@ -27,11 +27,11 @@ public class Produto {
     private BigDecimal preco;
 
     @Column(name = "horario_inicial")
-    @JsonFormat(pattern = "HH:mm")
+    @JsonFormat(pattern = "HH:mm", timezone = "America/Sao_Paulo")
     private LocalTime horarioInicial;
 
     @Column(name = "horario_final")
-    @JsonFormat(pattern = "HH:mm")
+    @JsonFormat(pattern = "HH:mm", timezone = "America/Sao_Paulo")
     private LocalTime horarioFinal;
 
     @Column(name = "url_imagem")

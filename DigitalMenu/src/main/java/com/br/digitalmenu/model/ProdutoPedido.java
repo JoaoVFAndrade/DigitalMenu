@@ -1,5 +1,6 @@
 package com.br.digitalmenu.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -31,12 +32,14 @@ public class ProdutoPedido {
     private Integer quantidade;
 
     @Column(nullable = false)
+    @JsonFormat(pattern = "dd/MM/yyyy", timezone = "America/Sao_Paulo")
     private LocalDate data = LocalDate.now();
 
     @Column(precision = 10, scale = 2, nullable = false)
     private BigDecimal subTotal;
 
     @Column(nullable = false)
+    @JsonFormat(pattern = "HH:mm:ss", timezone = "America/Sao_Paulo")
     private LocalTime horario = LocalTime.now();
 
     @Enumerated(EnumType.STRING)
