@@ -116,6 +116,10 @@ public class ProdutoService {
             produto.setHorarioFinal(dto.getHorarioFinal());
         }
 
+        if(dto.getDescricao() != null){
+            produto.setDescricao(produto.getDescricao());
+        }
+
         if (dto.getIdCategoria() != null) {
             produto.setCategoria(
                     categoriaRepository.findById(dto.getIdCategoria())
@@ -157,6 +161,7 @@ public class ProdutoService {
         produto.setFoto(dto.getFoto());
         produto.setEstoque(dto.getEstoque());
         produto.setAtivo(dto.getAtivo());
+        produto.setDescricao(dto.getDescricao());
 
         produto.setCategoria(categoriaRepository.findById(dto.getIdCategoria())
                 .orElseThrow(() -> new RuntimeException("Categoria não encontrada")));
@@ -199,6 +204,7 @@ public class ProdutoService {
         return ProdutoResponseDTO.builder()
                 .idProduto(produto.getIdProduto())
                 .nomeProduto(produto.getNomeProduto())
+                .descricao(produto.getDescricao())
                 .preco(produto.getPreco())
                 .horarioInicial(produto.getHorarioInicial())
                 .horarioFinal(produto.getHorarioFinal())
