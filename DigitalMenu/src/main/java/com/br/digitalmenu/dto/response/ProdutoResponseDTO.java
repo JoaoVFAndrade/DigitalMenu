@@ -21,6 +21,7 @@ public class ProdutoResponseDTO {
     private BigDecimal preco;
     private LocalTime horarioInicial;
     private LocalTime horarioFinal;
+    private String descricao;
     private String foto;
     private Boolean estoque;
     private Boolean ativo;
