@@ -44,6 +44,8 @@ public class Produto {
     @Column(name = "ativo")
     private Boolean ativo;
 
+    private String descricao;
+
     @ManyToOne
     @JoinColumn(name = "id_categoria")
     private Categoria categoria;

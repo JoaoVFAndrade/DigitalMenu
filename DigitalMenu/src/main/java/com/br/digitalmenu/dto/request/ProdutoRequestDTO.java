@@ -20,6 +20,7 @@ public class ProdutoRequestDTO {
     private Boolean estoque;
     private Boolean ativo;
     private Long idCategoria;
+    private String descricao;
     private List<Long> ingredientesIds;
     private List<Long> restricoesIds;
     private List<Long> diasSemanaIds;
