@@ -4,7 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b01df015-5659-40a4-a53c-8faf0147e4bb" name="Changes" comment="" />
+    <list default="true" id="b01df015-5659-40a4-a53c-8faf0147e4bb" name="Changes" comment="adicionando descricao">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalMenu/src/main/java/com/br/digitalmenu/controller/DashboardController.java" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalMenu/src/main/java/com/br/digitalmenu/controller/DashboardController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalMenu/src/main/java/com/br/digitalmenu/repository/ProdutoPedidoRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalMenu/src/main/java/com/br/digitalmenu/repository/ProdutoPedidoRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalMenu/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalMenu/src/main/resources/application.properties" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -17,13 +23,14 @@
         <option value="Interface" />
         <option value="Dockerfile" />
         <option value="Class" />
+        <option value="Record" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="cliente" />
+        <entry key="$PROJECT_DIR$" value="pedido" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -37,12 +44,8 @@
               <option name="branches">
                 <list>
                   <RecentBranch>
-                    <option name="branchName" value="pagamentos" />
-                    <option name="lastUsedInstant" value="1761959644" />
-                  </RecentBranch>
-                  <RecentBranch>
                     <option name="branchName" value="main" />
-                    <option name="lastUsedInstant" value="1761947567" />
+                    <option name="lastUsedInstant" value="1757553651" />
                   </RecentBranch>
                   <RecentBranch>
                     <option name="branchName" value="usuario" />
@@ -67,6 +70,9 @@
     &quot;accountId&quot;: &quot;1394a01c-4b49-4fbd-bb97-bf455b4c67b7&quot;
   }
 }</component>
+  <component name="JpbToolWindowState">
+    <option name="isToolWindowVisible" value="false" />
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -90,13 +96,14 @@
     "Docker.DigitalMenu.app: Compose Deployment.executor": "Run",
     "Docker.DigitalMenu/Dockerfile build.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "Merging main",
+    "git-widget-placeholder": "dashboard",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/pedro/OneDrive/Área de Trabalho/DigitalMenu",
+    "last_opened_file_path": "C:/Users/pedro.brasil/OneDrive - PRODESP/Área de Trabalho/DigitalMenu",
     "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
@@ -110,11 +117,6 @@
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\project\DigitalMenu\DigitalMenu\src\main\resources\static" />
     </key>
-  </component>
-  <component name="RunAnythingCache">
-    <option name="myCommands">
-      <command value="mvn clean" />
-    </option>
   </component>
   <component name="RunManager" selected="Application.DigitalMenuApplication">
     <configuration default="true" type="docker-deploy" factoryName="docker-compose.yml" temporary="true">
@@ -144,36 +146,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="DigitalMenu [clean]" type="MavenRunConfiguration" factoryName="Maven" temporary="true">
-      <MavenSettings>
-        <option name="myGeneralSettings" />
-        <option name="myRunnerSettings" />
-        <option name="myRunnerParameters">
-          <MavenRunnerParameters>
-            <option name="cmdOptions" />
-            <option name="profiles">
-              <set />
-            </option>
-            <option name="goals">
-              <list>
-                <option value="clean" />
-              </list>
-            </option>
-            <option name="multimoduleDir" />
-            <option name="pomFileName" value="pom.xml" />
-            <option name="profilesMap">
-              <map />
-            </option>
-            <option name="projectsCmdOptionValues">
-              <list />
-            </option>
-            <option name="resolveToWorkspace" value="false" />
-            <option name="workingDirPath" value="$PROJECT_DIR$/DigitalMenu" />
-          </MavenRunnerParameters>
-        </option>
-      </MavenSettings>
-      <method v="2" />
-    </configuration>
     <configuration name="DigitalMenu/Dockerfile build" type="docker-deploy" factoryName="dockerfile" temporary="true" server-name="Docker">
       <deployment type="dockerfile">
         <settings>
@@ -200,12 +172,9 @@
     </configuration>
     <list>
       <item itemvalue="Application.DigitalMenuApplication" />
-      <item itemvalue="Maven.DigitalMenu [clean]" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.DigitalMenuApplication" />
-        <item itemvalue="Maven.DigitalMenu [clean]" />
         <item itemvalue="Application.DigitalMenuApplication" />
       </list>
     </recent_temporary>
@@ -219,6 +188,23 @@
       <option name="presentableId" value="Default" />
       <updated>1756759412148</updated>
     </task>
+    <task id="LOCAL-00001" summary="adicionando descricao">
+      <option name="closed" value="true" />
+      <created>1762364425718</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1762364425718</updated>
+    </task>
+    <task id="LOCAL-00002" summary="adicionando descricao">
+      <option name="closed" value="true" />
+      <created>1762364514209</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1762364514209</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -233,6 +219,7 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <option name="LAST_COMMIT_MESSAGE" value="" />
+    <MESSAGE value="adicionando descricao" />
+    <option name="LAST_COMMIT_MESSAGE" value="adicionando descricao" />
   </component>
 </project>

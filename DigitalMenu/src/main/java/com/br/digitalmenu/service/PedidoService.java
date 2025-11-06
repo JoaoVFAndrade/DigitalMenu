@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -72,7 +71,7 @@ public class PedidoService {
 
         Pedido salvar = pedidoRepository.save(pedido);
         return new PedidoResponseDTO(salvar.getId(),salvar.getAbertoEm(),salvar.getFinalizadoEm(),
-                salvar.getStatusPedido(), salvar.getTotal(),new ClienteResponseDTO(salvar.getCliente()),new MesaResponseDTO(salvar.getMesa()), pedido.getProdutoPedidos() == null? new ArrayList<>():pedido.getProdutoPedidos().stream().map(ProdutoPedidoResponseDTO::new).toList());
+                salvar.getStatusPedido(), salvar.getTotal(),new ClienteResponseDTO(salvar.getCliente()),new MesaResponseDTO(salvar.getMesa()),pedido.getProdutoPedidos().stream().map(ProdutoPedidoResponseDTO::new).toList());
     }
 
     public void delete(Long id) {
