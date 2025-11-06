@@ -16,9 +16,9 @@ public interface ProdutoPedidoRepository extends JpaRepository<ProdutoPedido, Lo
                     p.nomeProduto,
                     c.idCategoria,
                     c.nomeCategoria,
-                    SUM(pp.quantidade),
+                    SUM(pp.quantidade) AS qtde,
                     p.preco,
-                    SUM(pp.subTotal)
+                    SUM(pp.subTotal) AS total
                 )
                 FROM ProdutoPedido pp
                 JOIN pp.produto p
@@ -26,7 +26,6 @@ public interface ProdutoPedidoRepository extends JpaRepository<ProdutoPedido, Lo
                 WHERE pp.data = :data
                 GROUP BY p.idProduto, p.nomeProduto, c.idCategoria, c.nomeCategoria
                 ORDER BY SUM(pp.subTotal) DESC
-                LIMIT 10
             """)
     List<ProdutoDashboardDTO> buscarResumoPorData(@Param("data") LocalDate data);
 
