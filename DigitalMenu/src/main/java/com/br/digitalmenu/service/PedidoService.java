@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -66,6 +67,7 @@ public class PedidoService {
         pedido.setAbertoEm(LocalDateTime.now());
         pedido.setStatusPedido(StatusPedido.ABERTO);
         pedido.setTotal(BigDecimal.ZERO);
+        pedido.setProdutoPedidos(new ArrayList<>());
         pedido.setCliente(clienteRepository.getReferenceById(dto.getIdCliente()));
         pedido.setMesa(mesaRepository.getReferenceById(dto.getIdMesa()));
 
