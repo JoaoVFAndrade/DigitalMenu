@@ -28,4 +28,10 @@ public class DashboardController {
     public ResponseEntity<?> getQuantidadeDeProdutos(){
         return dashboardService.getQuantidadeProdutos();
     }
+
+    @GetMapping("/top10ProdutosDoDia")
+    public ResponseEntity<?> getTop10ProdutosDoDia(){
+        return dashboardService.getTop10ProdutosMaisVendidosDoDia();
+    }
+
 }

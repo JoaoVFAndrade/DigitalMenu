@@ -91,4 +91,8 @@ public class DashboardService {
         return ResponseEntity.ok(Map.of("totalPedidos",totalProdutosHoje.get() ,"porcentagem",porcentagem));
     }
 
+    public ResponseEntity<?> getTop10ProdutosMaisVendidosDoDia(){
+        return ResponseEntity.ok(produtoPedidoRepository.buscarResumoPorData(LocalDate.now()));
+    }
+
 }
