@@ -2,6 +2,7 @@ package com.br.digitalmenu.service;
 
 import com.br.digitalmenu.dto.InsertProdutoPedidoDTO;
 import com.br.digitalmenu.dto.response.ProdutoPedidoResponseDTO;
+import com.br.digitalmenu.model.Pedido;
 import com.br.digitalmenu.model.ProdutoPedido;
 import com.br.digitalmenu.model.StatusProdutoPedido;
 import com.br.digitalmenu.repository.PedidoRepository;
@@ -111,7 +112,11 @@ public class ProdutoPedidoService {
                 .add(produtoPedido.getSubTotal())
                 .setScale(2, RoundingMode.HALF_UP);
 
-        produtoPedido.getPedido().setTotal(novoTotal);
+        Pedido pedido = pedidoRepository.getReferenceById(produtoPedido.getPedido().getId());
+
+        pedido.setTotal(novoTotal);
+
+        pedidoRepository.save(pedido);
 
         // Salva as alterações
         produtoPedidoRepository.save(produtoPedido);
