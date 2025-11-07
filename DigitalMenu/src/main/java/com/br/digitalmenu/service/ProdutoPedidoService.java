@@ -45,13 +45,6 @@ public class ProdutoPedidoService {
         // Salva o item
         produtoPedidoRepository.save(produtoPedido);
 
-        // Atualiza o total do pedido automaticamente
-        var pedido = produtoPedido.getPedido();
-        BigDecimal totalAtual = pedido.getTotal() != null ? pedido.getTotal() : BigDecimal.ZERO;
-        BigDecimal novoTotal = totalAtual.add(subTotal).setScale(2, RoundingMode.HALF_UP);
-        pedido.setTotal(novoTotal);
-        pedidoRepository.save(pedido);
-
         // Cria o Location do novo recurso
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .buildAndExpand(produtoPedido.getId())
