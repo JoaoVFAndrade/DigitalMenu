@@ -224,6 +224,9 @@ public class ProdutoService {
     }
 
     private boolean estaEntre(LocalTime inicio, LocalTime fim) {
+        if(inicio.equals(LocalTime.of(0,0,0)) && fim.equals(LocalTime.of(0,0,0)))
+            return true;
+
         LocalTime horario = LocalTime.now();
         if (inicio.isAfter(fim)) {
             LocalTime temp = inicio;
