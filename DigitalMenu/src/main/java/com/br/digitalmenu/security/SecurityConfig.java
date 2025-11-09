@@ -32,7 +32,8 @@ public class SecurityConfig {
                                 "/clientes/cadastro",
                                 "/clientes/confirmar",
                                 "/clientes/reenviar-codigo",
-                                "/recuperacao/**"
+                                "/recuperacao/**",
+                                "/produtoPedido/**"
                         ).permitAll()
 
                         //Acesso autenticado (clientes, garçons, admin)
