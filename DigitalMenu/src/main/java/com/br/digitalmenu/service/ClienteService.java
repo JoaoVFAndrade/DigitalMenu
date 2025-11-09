@@ -44,6 +44,7 @@ public class ClienteService {
         Cliente cliente = new Cliente();
         cliente.setNome(dto.getNome());
         cliente.setEmail(dto.getEmail());
+        cliente.setRestricoes(new ArrayList<>());
         cliente.setSenha(passwordEncoder.encode(dto.getSenha()));
         cliente.setDataNascimento(dto.getDataNascimento());
         cliente.setEmailValidado(false);

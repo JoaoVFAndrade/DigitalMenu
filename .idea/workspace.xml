@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b01df015-5659-40a4-a53c-8faf0147e4bb" name="Changes" comment="adicionando descricao">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="b01df015-5659-40a4-a53c-8faf0147e4bb" name="Changes" comment="bug preco">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalMenu/src/main/java/com/br/digitalmenu/controller/DashboardController.java" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalMenu/src/main/java/com/br/digitalmenu/controller/DashboardController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalMenu/src/main/java/com/br/digitalmenu/repository/ProdutoPedidoRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalMenu/src/main/java/com/br/digitalmenu/repository/ProdutoPedidoRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalMenu/src/main/java/com/br/digitalmenu/service/ProdutoPedidoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalMenu/src/main/java/com/br/digitalmenu/service/ProdutoPedidoService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DigitalMenu/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalMenu/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -30,7 +28,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="pedido" />
+        <entry key="$PROJECT_DIR$" value="descricao" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -100,7 +98,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "dashboard",
+    "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/pedro.brasil/OneDrive - PRODESP/Área de Trabalho/DigitalMenu",
@@ -119,18 +117,6 @@
     </key>
   </component>
   <component name="RunManager" selected="Application.DigitalMenuApplication">
-    <configuration default="true" type="docker-deploy" factoryName="docker-compose.yml" temporary="true">
-      <deployment type="docker-compose.yml">
-        <settings />
-      </deployment>
-      <method v="2" />
-    </configuration>
-    <configuration default="true" type="docker-deploy" factoryName="dockerfile" temporary="true">
-      <deployment type="dockerfile">
-        <settings />
-      </deployment>
-      <method v="2" />
-    </configuration>
     <configuration name="DigitalMenuApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="ALTERNATIVE_JRE_PATH" value="17" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
@@ -170,8 +156,22 @@
       </deployment>
       <method v="2" />
     </configuration>
+    <configuration default="true" type="docker-deploy" factoryName="docker-compose.yml" temporary="true">
+      <deployment type="docker-compose.yml">
+        <settings />
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="docker-deploy" factoryName="dockerfile" temporary="true">
+      <deployment type="dockerfile">
+        <settings />
+      </deployment>
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="Application.DigitalMenuApplication" />
+      <item itemvalue="Docker.DigitalMenu.app: Compose Deployment" />
+      <item itemvalue="Docker.DigitalMenu/Dockerfile build" />
     </list>
     <recent_temporary>
       <list>
@@ -204,7 +204,31 @@
       <option name="project" value="LOCAL" />
       <updated>1762364514209</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="correcao ao criar pedido">
+      <option name="closed" value="true" />
+      <created>1762473306122</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1762473306122</updated>
+    </task>
+    <task id="LOCAL-00004" summary="correcao">
+      <option name="closed" value="true" />
+      <created>1762473651475</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1762473651475</updated>
+    </task>
+    <task id="LOCAL-00005" summary="bug preco">
+      <option name="closed" value="true" />
+      <created>1762476932737</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1762476932737</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -220,6 +244,9 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="adicionando descricao" />
-    <option name="LAST_COMMIT_MESSAGE" value="adicionando descricao" />
+    <MESSAGE value="correcao ao criar pedido" />
+    <MESSAGE value="correcao" />
+    <MESSAGE value="bug preco" />
+    <option name="LAST_COMMIT_MESSAGE" value="bug preco" />
   </component>
 </project>
