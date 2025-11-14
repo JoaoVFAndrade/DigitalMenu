@@ -49,7 +49,7 @@ public class SecurityConfig {
                                 "/pedidos/possuiPedidoAberto"
                         ).authenticated()
 
-                        .requestMatchers(HttpMethod.PUT,"/pedidos/**","/clientes/**" ).hasAuthority("CLIENTE")
+                        .requestMatchers(HttpMethod.PUT,"/pedidos/**","/clientes/**" ).hasAnyAuthority("CLIENTE", "FUNCIONARIO_ADM", "FUNCIONARIO_GARCOM")
 
                         .requestMatchers(HttpMethod.POST,"/pedidos/**","/clientes/**","/produtoPedido/**","/avaliacao/insert" ).hasAuthority("CLIENTE")
 
