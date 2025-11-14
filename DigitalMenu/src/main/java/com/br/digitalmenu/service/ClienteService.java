@@ -7,7 +7,9 @@ import com.br.digitalmenu.dto.request.ClienteRequestDTO;
 import com.br.digitalmenu.dto.response.ClienteResponseDTO;
 import com.br.digitalmenu.model.Cliente;
 import com.br.digitalmenu.model.Restricao;
+import com.br.digitalmenu.model.StatusPedido;
 import com.br.digitalmenu.repository.ClienteRepository;
+import com.br.digitalmenu.repository.PedidoRepository;
 import com.br.digitalmenu.repository.RestricaoRepository;
 import jakarta.mail.MessagingException;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -39,6 +42,9 @@ public class ClienteService {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private PedidoRepository pedidoRepository;
 
     public ClienteResponseDTO salvar(ClienteRequestDTO dto) throws MessagingException {
         Cliente cliente = new Cliente();
@@ -126,6 +132,13 @@ public class ClienteService {
         dto.setDataNascimento(cliente.getDataNascimento());
         dto.setRestricoes(cliente.getRestricoes().stream().map(restricao -> new RestricaoDTO(restricao.getIdRestricao(), restricao.getNomeRestricao(), restricao.getTipoRestricao())).toList());
         return dto;
+    }
+
+    public ResponseEntity<?> possuiPedidoAberto(Long id){
+        if (!clienteRepository.existsById(id))
+            return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(Map.of("possuiPedido",pedidoRepository.existsByCliente_IdClienteAndStatusPedido(id, StatusPedido.ABERTO)));
+
     }
 
 }

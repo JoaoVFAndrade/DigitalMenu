@@ -15,4 +15,8 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
 
     @Query("SELECT p FROM Pedido p WHERE FUNCTION('DATE', p.finalizadoEm) = :dataEspecifica")
     List<Pedido> findByFinalizadoEmData(LocalDate dataEspecifica);
+
+    boolean existsByCliente_IdClienteAndStatusPedido(Long idCliente, StatusPedido statusPedido);
+
+
 }
