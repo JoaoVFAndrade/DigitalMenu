@@ -52,6 +52,7 @@ public class ProdutoService {
         boolean isCliente = roles.stream()
                 .anyMatch(r -> r.getAuthority().equals("CLIENTE"));
 
+
         boolean isAdmin = roles.stream()
                 .anyMatch(r -> r.getAuthority().equals("FUNCIONARIO_ADM"));
 
