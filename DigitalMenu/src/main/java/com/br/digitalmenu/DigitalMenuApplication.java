@@ -30,10 +30,13 @@ public class DigitalMenuApplication {
                 Funcionario admin = new Funcionario();
                 admin.setNome("Administrador");
                 admin.setEmail("admin@email.com");
-                admin.setSenha(encoder.encode("admin123"));
+                admin.setSenha(encoder.encode("admin123")); // Senha encodada
                 admin.setRoles(Set.of(RoleNome.FUNCIONARIO_ADM));
                 repo.save(admin);
+                System.out.println("✅ Usuário ADMIN 'admin@email.com' criado com sucesso!");
+            }
 
+            if (clienteRepository.findByEmail("email@email.com").isEmpty()) {
                 Cliente cliente = new Cliente();
                 cliente.setNome("clienteGarcom");
                 cliente.setSenha("hello");
@@ -42,10 +45,8 @@ public class DigitalMenuApplication {
                 cliente.setRole(RoleNome.CLIENTE);
                 cliente.setDataNascimento(LocalDate.of(2000,1,1));
                 cliente.setRestricoes(new ArrayList<>());
-
                 clienteRepository.save(cliente);
-
-                System.out.println("✅ Usuário ADMIN criado com sucesso!");
+                System.out.println("✅ Usuário CLIENTE 'email@email.com' criado com sucesso!");
             }
         };
     }
