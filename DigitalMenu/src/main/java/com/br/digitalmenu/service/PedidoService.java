@@ -12,11 +12,15 @@ import com.br.digitalmenu.repository.MesaRepository;
 import com.br.digitalmenu.repository.PedidoRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -63,12 +67,17 @@ public class PedidoService {
     }
 
     public PedidoResponseDTO save (@Valid PedidoRequestDTO dto){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Collection<? extends GrantedAuthority> roles = authentication.getAuthorities();
+        boolean isGarcom = roles.stream()
+                .anyMatch(r -> r.getAuthority().equals("FUNCIONARIO_GARCOM"));
+
         Pedido pedido = new Pedido();
         pedido.setAbertoEm(LocalDateTime.now());
         pedido.setStatusPedido(StatusPedido.ABERTO);
         pedido.setTotal(BigDecimal.ZERO);
         pedido.setProdutoPedidos(new ArrayList<>());
-        pedido.setCliente(clienteRepository.getReferenceById(dto.getIdCliente()));
+        pedido.setCliente(clienteRepository.getReferenceById(isGarcom? 1 : dto.getIdCliente()));
         pedido.setMesa(mesaRepository.getReferenceById(dto.getIdMesa()));
 
         Pedido salvar = pedidoRepository.save(pedido);
