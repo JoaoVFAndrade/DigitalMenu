@@ -45,7 +45,8 @@ public class SecurityConfig {
                                 "/funcionarios/**",
                                 "/diaSemana/**",
                                 "/pedidos/cliente",
-                                "/pedidos/gerarPagamento"
+                                "/pedidos/gerarPagamento",
+                                "/pedidos/possuiPedidoAberto"
                         ).authenticated()
 
                         .requestMatchers(HttpMethod.PUT,"/pedidos/**","/clientes/**" ).hasAuthority("CLIENTE")
