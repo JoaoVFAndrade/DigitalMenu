@@ -29,4 +29,13 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.badRequest().body(body);
     }
+
+    @ExceptionHandler(TentativasDeLoginException.class)
+    public ResponseEntity<?> handleSenhaInvalida(TentativasDeLoginException ex) {
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
+                .body(Map.of(
+                        "erro", ex.getMessage()
+                ));
+    }
 }

@@ -1,6 +1,7 @@
 package com.br.digitalmenu.service;
 
 import com.br.digitalmenu.exception.ResourceNotFoundException;
+import com.br.digitalmenu.exception.TentativasDeLoginException;
 import com.br.digitalmenu.model.Cliente;
 import com.br.digitalmenu.model.Funcionario;
 import com.br.digitalmenu.repository.ClienteRepository;
@@ -49,7 +50,13 @@ public class AuthService {
         boolean matches = passwordEncoder.matches(senhaTrim, cliente.getSenha());
         logger.info("PasswordEncoder.matches -> {}", matches);
 
+        if(cliente.getTentativasDeLoginFracasada()>=3){
+            throw new TentativasDeLoginException("Tentativas de login excedidas, redefina sua senha");
+        }
+
         if (!passwordEncoder.matches(senha, cliente.getSenha())) {
+            cliente.setTentativasDeLoginFracasada((byte) (cliente.getTentativasDeLoginFracasada()+ (byte) 1));
+            clienteRepository.save(cliente);
             throw new RuntimeException("Senha inválida");
         }
         // cliente sempre tera role fixa "CLIENTE"

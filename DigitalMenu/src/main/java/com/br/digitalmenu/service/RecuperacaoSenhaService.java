@@ -64,6 +64,7 @@ public class RecuperacaoSenhaService {
         Optional<Cliente> clienteOpt = clienteRepository.findByEmail(email);
         if (clienteOpt.isPresent()) {
             Cliente cliente = clienteOpt.get();
+            cliente.setTentativasDeLoginFracasada(Byte.parseByte("0"));
             cliente.setSenha(passwordEncoder.encode(novaSenha));
             clienteRepository.save(cliente);
             resetTokens.remove(token);
