@@ -18,6 +18,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URI;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -79,5 +80,9 @@ public class MesaService {
         mesaRepository.save(mesa);
 
         return ResponseEntity.noContent().build();
+    }
+
+    public List<Mesa> getAllAtivos() {
+        return mesaRepository.findByAtivoTrue();
     }
 }

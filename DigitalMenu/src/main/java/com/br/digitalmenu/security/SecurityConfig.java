@@ -38,7 +38,6 @@ public class SecurityConfig {
 
                         //Acesso autenticado (clientes, garçons, admin)
                         .requestMatchers(HttpMethod.GET,
-                                "/produtos/**",
                                 "/categorias/**",
                                 "/ingredientes/**",
                                 "/restricoes/**",
@@ -46,17 +45,18 @@ public class SecurityConfig {
                                 "/diaSemana/**",
                                 "/pedidos/cliente",
                                 "/pedidos/gerarPagamento",
-                                "/pedidos/possuiPedidoAberto"
+                                "/pedidos/possuiPedidoAberto",
+                                "/mesa/**",
+                                "/produtos/**"
                         ).authenticated()
 
-                        .requestMatchers(HttpMethod.PUT,"/pedidos/**","/clientes/**" ).hasAnyAuthority("CLIENTE", "FUNCIONARIO_ADM", "FUNCIONARIO_GARCOM")
+                        .requestMatchers(HttpMethod.PUT, "/pedidos/**", "/clientes/**").hasAnyAuthority("CLIENTE", "FUNCIONARIO_ADM", "FUNCIONARIO_GARCOM")
 
-                        .requestMatchers(HttpMethod.POST,"/pedidos/**","/clientes/**","/produtoPedido/**","/avaliacao/insert" ).hasAuthority("CLIENTE")
+                        .requestMatchers(HttpMethod.POST, "/pedidos/**", "/clientes/**", "/produtoPedido/**", "/avaliacao/insert").hasAnyAuthority("CLIENTE", "FUNCIONARIO_GARCOM")
 
                         //Acesso do garçom
-                        .requestMatchers("/pedidos/abertos").hasAuthority("FUNCIONARIO_GARCOM")
-                            //@TODO verificar quais rotas o garcom podera acessar
-                        //Acesso do administrador (CRUD completo)
+                        .requestMatchers("/mesa/**").hasAuthority("FUNCIONARIO_GARCOM")
+
                         .requestMatchers(
                                 "/adm/**",
                                 "/categorias/**",
@@ -78,6 +78,7 @@ public class SecurityConfig {
 
         return http.build();
     }
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
