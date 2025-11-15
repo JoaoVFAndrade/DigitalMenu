@@ -40,6 +40,9 @@ public class Cliente {
     @Column(nullable = false)
     private boolean emailValidado = false;
 
+    @Column(columnDefinition = "TINYINT DEFAULT 0")
+    private byte tentativasDeLoginFracasada;
+
     @ManyToMany
     private List<Restricao> restricoes;
 
