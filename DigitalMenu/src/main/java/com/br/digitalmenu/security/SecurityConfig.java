@@ -54,7 +54,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST,"/pedidos/**","/clientes/**","/produtoPedido/**","/avaliacao/insert" ).hasAuthority("CLIENTE")
 
                         //Acesso do garçom
-                        .requestMatchers("/pedidos/abertos").hasAuthority("FUNCIONARIO_GARCOM")
+                        .requestMatchers("/pedidos/abertos", "/mesa/**").hasAuthority("FUNCIONARIO_GARCOM")
                             //@TODO verificar quais rotas o garcom podera acessar
                         //Acesso do administrador (CRUD completo)
                         .requestMatchers(

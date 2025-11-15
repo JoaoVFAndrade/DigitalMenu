@@ -5,11 +5,15 @@ import com.br.digitalmenu.dto.response.ClienteResponseDTO;
 import com.br.digitalmenu.dto.response.MesaResponseDTO;
 import com.br.digitalmenu.dto.response.PedidoResponseDTO;
 import com.br.digitalmenu.dto.response.ProdutoPedidoResponseDTO;
+import com.br.digitalmenu.exception.ResourceNotFoundException;
+import com.br.digitalmenu.model.Cliente;
+import com.br.digitalmenu.model.Mesa;
 import com.br.digitalmenu.model.Pedido;
 import com.br.digitalmenu.model.StatusPedido;
 import com.br.digitalmenu.repository.ClienteRepository;
 import com.br.digitalmenu.repository.MesaRepository;
 import com.br.digitalmenu.repository.PedidoRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -72,13 +76,23 @@ public class PedidoService {
         boolean isGarcom = roles.stream()
                 .anyMatch(r -> r.getAuthority().equals("FUNCIONARIO_GARCOM"));
 
+        Mesa mesa = mesaRepository.findById(dto.getIdMesa())
+                .orElseThrow(() -> new ResourceNotFoundException("Mesa com ID " + dto.getIdMesa() + " não encontrada."));
+
         Pedido pedido = new Pedido();
         pedido.setAbertoEm(LocalDateTime.now());
         pedido.setStatusPedido(StatusPedido.ABERTO);
         pedido.setTotal(BigDecimal.ZERO);
         pedido.setProdutoPedidos(new ArrayList<>());
-        pedido.setCliente(clienteRepository.getReferenceById(isGarcom? 1 : dto.getIdCliente()));
-        pedido.setMesa(mesaRepository.getReferenceById(dto.getIdMesa()));
+
+        if (isGarcom) {
+            Cliente clientePadraoGarcom = clienteRepository.findByEmail("email@email.com")
+                    .orElseThrow(() -> new EntityNotFoundException("Cliente padrão 'email@email.com' não encontrado!"));
+            pedido.setCliente(clientePadraoGarcom);
+        } else {
+            pedido.setCliente(clienteRepository.getReferenceById(dto.getIdCliente()));
+        }
+        pedido.setMesa(mesa);
 
         Pedido salvar = pedidoRepository.save(pedido);
         return new PedidoResponseDTO(salvar.getId(),salvar.getAbertoEm(),salvar.getFinalizadoEm(),
