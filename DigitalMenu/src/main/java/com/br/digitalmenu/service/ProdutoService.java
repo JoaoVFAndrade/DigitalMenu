@@ -49,27 +49,34 @@ public class ProdutoService {
     public List<ProdutoResponseDTO> findAll() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Collection<? extends GrantedAuthority> roles = authentication.getAuthorities();
-        boolean isCliente = roles.stream()
-                .anyMatch(r -> r.getAuthority().equals("CLIENTE"));
 
+        boolean isCliente = roles.stream().anyMatch(r -> r.getAuthority().equals("CLIENTE"));
+        boolean isAdmin = roles.stream().anyMatch(r -> r.getAuthority().equals("FUNCIONARIO_ADM"));
 
-        boolean isAdmin = roles.stream()
-                .anyMatch(r -> r.getAuthority().equals("FUNCIONARIO_ADM"));
+        // Admin vê tudo
+        if (isAdmin) {
+            return produtoRepository.findAll().stream()
+                    .map(this::toDTO)
+                    .collect(Collectors.toList());
+        }
 
-        if(isAdmin) return produtoRepository.findAll().stream().map(this::toDTO).collect(Collectors.toList());
-
-        Cliente cliente = clienteRepository.findByEmail(authentication.getName()).get();
-
+        // Filtra produtos por dia da semana e horário
         List<Produto> produtos = produtoRepository.findAll().stream()
                 .filter(produto -> produto.getDiasSemana().stream()
                         .map(DiaSemana::getIdDia)
-                        .anyMatch(idDia -> idDia.equals(Long.parseLong(String.valueOf(LocalDate.now().getDayOfWeek().getValue())))))
-                .filter(produto -> {
-                    return estaEntre(produto.getHorarioInicial(),produto.getHorarioFinal());
-                })
+                        .anyMatch(idDia -> idDia.equals((long) LocalDate.now().getDayOfWeek().getValue()))
+                )
+                .filter(produto -> estaEntre(produto.getHorarioInicial(), produto.getHorarioFinal()))
                 .toList();
 
-        if(!isCliente) return produtos.stream().map(this::toDTO).toList();
+        // Se não é cliente, apenas retorna os produtos filtrados
+        if (!isCliente) {
+            return produtos.stream().map(this::toDTO).toList();
+        }
+
+        // Para clientes, filtra produtos pelas restrições do cliente
+        Cliente cliente = clienteRepository.findByEmail(authentication.getName())
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado: " + authentication.getName()));
 
         return produtos.stream()
                 .filter(produto ->
