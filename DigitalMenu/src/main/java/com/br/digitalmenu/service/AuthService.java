@@ -32,8 +32,13 @@ public class AuthService {
         Funcionario funcionario = funcionarioRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("Funcionário não encontrado"));
 
+        if(funcionario.getTentativasDeLoginFracasada()>=3){
+            throw new TentativasDeLoginException("Tentativas de login excedidas, redefina sua senha");
+        }
+
         // compara a senha digitada com a hash do banco
         if (!passwordEncoder.matches(senha, funcionario.getSenha())) {
+            funcionario.setTentativasDeLoginFracasada((byte) (funcionario.getTentativasDeLoginFracasada()+1));
             throw new RuntimeException("Senha inválida");
         }
 

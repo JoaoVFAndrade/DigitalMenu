@@ -76,6 +76,7 @@ public class RecuperacaoSenhaService {
         if (funcionarioOpt.isPresent()) {
             Funcionario funcionario = funcionarioOpt.get();
             funcionario.setSenha(passwordEncoder.encode(novaSenha));
+            funcionario.setTentativasDeLoginFracasada(Byte.parseByte("0"));
             funcionarioRepository.save(funcionario);
             resetTokens.remove(token);
             return;

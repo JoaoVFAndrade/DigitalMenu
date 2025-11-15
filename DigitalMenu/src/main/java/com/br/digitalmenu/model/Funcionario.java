@@ -37,6 +37,9 @@ public class Funcionario {
     @Column(name = "role")
     private Set<RoleNome> roles = new HashSet<>();
 
+    @Column(columnDefinition = "TINYINT DEFAULT 0")
+    private byte tentativasDeLoginFracasada;
+
 
     public Long getIdFuncionario() {
         return idFuncionario;
@@ -76,5 +79,13 @@ public class Funcionario {
 
     public void setRoles(Set<RoleNome> roles) {
         this.roles = roles;
+    }
+
+    public byte getTentativasDeLoginFracasada() {
+        return tentativasDeLoginFracasada;
+    }
+
+    public void setTentativasDeLoginFracasada(byte tentativasDeLoginFracasada) {
+        this.tentativasDeLoginFracasada = tentativasDeLoginFracasada;
     }
 }
