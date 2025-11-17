@@ -6,6 +6,7 @@ import com.br.digitalmenu.model.Cliente;
 import com.br.digitalmenu.model.Funcionario;
 import com.br.digitalmenu.repository.ClienteRepository;
 import com.br.digitalmenu.repository.FuncionarioRepository;
+import com.br.digitalmenu.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -66,6 +67,11 @@ public class RecuperacaoSenhaService {
             Cliente cliente = clienteOpt.get();
             cliente.setTentativasDeLoginFracasada(Byte.parseByte("0"));
             cliente.setSenha(passwordEncoder.encode(novaSenha));
+            if(Util.validarSenha(novaSenha)){
+                cliente.setSenha(passwordEncoder.encode(novaSenha));
+            }else{
+                throw new RuntimeException("Senha no padrão inválido");
+            }
             clienteRepository.save(cliente);
             resetTokens.remove(token);
             return;
@@ -75,7 +81,12 @@ public class RecuperacaoSenhaService {
         Optional<Funcionario> funcionarioOpt = funcionarioRepository.findByEmail(email);
         if (funcionarioOpt.isPresent()) {
             Funcionario funcionario = funcionarioOpt.get();
-            funcionario.setSenha(passwordEncoder.encode(novaSenha));
+            if(Util.validarSenha(novaSenha)){
+                funcionario.setSenha(passwordEncoder.encode(novaSenha));
+            }else{
+                throw new RuntimeException("Senha no padrão inválido");
+            }
+
             funcionario.setTentativasDeLoginFracasada(Byte.parseByte("0"));
             funcionarioRepository.save(funcionario);
             resetTokens.remove(token);

@@ -7,6 +7,7 @@ import com.br.digitalmenu.exception.ResourceNotFoundException;
 import com.br.digitalmenu.model.Funcionario;
 import com.br.digitalmenu.model.RoleNome;
 import com.br.digitalmenu.repository.FuncionarioRepository;
+import com.br.digitalmenu.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,11 @@ public class FuncionarioService {
         Funcionario funcionario = new Funcionario();
         funcionario.setNome(dto.getNome());
         funcionario.setEmail(dto.getEmail());
-        funcionario.setSenha(passwordEncoder.encode(dto.getSenha()));
+        if(Util.validarSenha(dto.getSenha())){
+            funcionario.setSenha(passwordEncoder.encode(dto.getSenha()));
+        }else{
+            throw new RuntimeException("Senha no padrão inválido");
+        }
 
         if (dto.getRoles() != null) {
             var roles = dto.getRoles().stream()

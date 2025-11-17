@@ -11,6 +11,7 @@ import com.br.digitalmenu.model.StatusPedido;
 import com.br.digitalmenu.repository.ClienteRepository;
 import com.br.digitalmenu.repository.PedidoRepository;
 import com.br.digitalmenu.repository.RestricaoRepository;
+import com.br.digitalmenu.util.Util;
 import jakarta.mail.MessagingException;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +52,12 @@ public class ClienteService {
         cliente.setNome(dto.getNome());
         cliente.setEmail(dto.getEmail());
         cliente.setRestricoes(new ArrayList<>());
-        cliente.setSenha(passwordEncoder.encode(dto.getSenha()));
+        if(Util.validarSenha(dto.getSenha())){
+            cliente.setSenha(passwordEncoder.encode(dto.getSenha()));
+        }else{
+            throw new RuntimeException("Senha no padrão inválido");
+        }
+
         cliente.setDataNascimento(dto.getDataNascimento());
         cliente.setEmailValidado(false);
 
