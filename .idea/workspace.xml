@@ -6,7 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="b01df015-5659-40a4-a53c-8faf0147e4bb" name="Changes" comment="bug preco">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalMenu/src/main/java/com/br/digitalmenu/service/ProdutoPedidoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalMenu/src/main/java/com/br/digitalmenu/service/ProdutoPedidoService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalMenu/src/main/java/com/br/digitalmenu/security/CorsConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalMenu/src/main/java/com/br/digitalmenu/security/CorsConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalMenu/src/main/java/com/br/digitalmenu/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalMenu/src/main/java/com/br/digitalmenu/security/SecurityConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DigitalMenu/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalMenu/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -102,6 +103,7 @@
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/pedro.brasil/OneDrive - PRODESP/Área de Trabalho/DigitalMenu",
+    "node.js.selected.package.tslint": "(autodetect)",
     "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
