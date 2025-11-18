@@ -42,6 +42,8 @@ public class CategoriaService {
 
     public CategoriaResponseDTO save(@Valid CategoriaRequestDTO dto){
         Categoria categoria = new Categoria();
+        if(categoriaRepository.existsByNomeCategoriaIgnoreCase(dto.getNomeCategoria()))
+            throw new RuntimeException("Categoria já cadastrada");
         categoria.setNomeCategoria(dto.getNomeCategoria());
         categoria.setAtivo(dto.isAtivo());
 

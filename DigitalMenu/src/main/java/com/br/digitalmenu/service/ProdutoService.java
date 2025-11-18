@@ -162,6 +162,8 @@ public class ProdutoService {
 
     public ProdutoResponseDTO salvar(ProdutoRequestDTO dto){
         Produto produto = new Produto();
+        if(produtoRepository.existsByNomeProdutoIgnoreCase(dto.getNomeProduto()))
+            throw new RuntimeException("Produto já cadastrado");
         produto.setNomeProduto(dto.getNomeProduto());
         produto.setPreco(dto.getPreco());
         produto.setHorarioInicial(dto.getHorarioInicial());
