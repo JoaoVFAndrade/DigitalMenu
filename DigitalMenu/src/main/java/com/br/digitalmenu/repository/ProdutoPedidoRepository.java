@@ -1,6 +1,7 @@
 package com.br.digitalmenu.repository;
 
 import com.br.digitalmenu.dto.ProdutoDashboardDTO;
+import com.br.digitalmenu.dto.RelatorioVendasDeProdutoDTO;
 import com.br.digitalmenu.model.ProdutoPedido;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -31,5 +32,18 @@ public interface ProdutoPedidoRepository extends JpaRepository<ProdutoPedido, Lo
 
     List<ProdutoPedido> findByData(LocalDate data);
 
+    @Query("""
+    SELECT new com.br.digitalmenu.dto.RelatorioVendasDeProdutoDTO(
+        p.nomeProduto,
+        SUM(pp.quantidade),
+        SUM(pp.subTotal),
+        p.categoria.id
+    )
+    FROM ProdutoPedido pp
+    JOIN pp.produto p
+    WHERE pp.status = 'FINALIZADO'
+    GROUP BY p.id
+""")
+    List<RelatorioVendasDeProdutoDTO> listarResumoProdutosFinalizados();
 
 }

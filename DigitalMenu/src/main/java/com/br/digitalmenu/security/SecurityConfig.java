@@ -31,6 +31,7 @@ public class SecurityConfig {
                                 "/swagger-ui.html",
                                 "/clientes/cadastro",
                                 "/clientes/confirmar",
+                                "/relatorios/**",
                                 "/clientes/reenviar-codigo",
                                 "/recuperacao/**",
                                 "/produtoPedido/**",
