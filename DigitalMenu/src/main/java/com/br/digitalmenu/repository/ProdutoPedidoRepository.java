@@ -46,4 +46,52 @@ public interface ProdutoPedidoRepository extends JpaRepository<ProdutoPedido, Lo
 """)
     List<RelatorioVendasDeProdutoDTO> listarResumoProdutosFinalizados();
 
+    @Query("""
+    SELECT new com.br.digitalmenu.dto.RelatorioVendasDeProdutoDTO(
+        p.nomeProduto,
+        SUM(pp.quantidade),
+        SUM(pp.subTotal),
+        p.categoria.id
+    )
+    FROM ProdutoPedido pp
+    JOIN pp.produto p
+    WHERE pp.status = 'FINALIZADO'
+      AND pp.data >= :data
+    GROUP BY p.id
+""")
+    List<RelatorioVendasDeProdutoDTO> listarPorDataIgualOuDepois(@Param("data") LocalDate data);
+
+    @Query("""
+    SELECT new com.br.digitalmenu.dto.RelatorioVendasDeProdutoDTO(
+        p.nomeProduto,
+        SUM(pp.quantidade),
+        SUM(pp.subTotal),
+        p.categoria.id
+    )
+    FROM ProdutoPedido pp
+    JOIN pp.produto p
+    WHERE pp.status = 'FINALIZADO'
+      AND pp.data <= :data
+    GROUP BY p.id
+""")
+    List<RelatorioVendasDeProdutoDTO> listarPorDataAntesOuIgual(@Param("data") LocalDate data);
+
+    @Query("""
+    SELECT new com.br.digitalmenu.dto.RelatorioVendasDeProdutoDTO(
+        p.nomeProduto,
+        SUM(pp.quantidade),
+        SUM(pp.subTotal),
+        p.categoria.id
+    )
+    FROM ProdutoPedido pp
+    JOIN pp.produto p
+    WHERE pp.status = 'FINALIZADO'
+      AND pp.data BETWEEN :inicio AND :fim
+    GROUP BY p.id
+""")
+    List<RelatorioVendasDeProdutoDTO> listarPorPeriodo(
+            @Param("inicio") LocalDate dataInicio,
+            @Param("fim") LocalDate dataFim
+    );
+
 }
